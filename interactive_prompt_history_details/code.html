@@ -1,0 +1,667 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PromptLab - Prompt History</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#d0bcff",
+                    "inverse-surface": "#d3e4fe",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "surface-bright": "#2a3a4f",
+                    "surface-container": "#102034",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "on-surface-variant": "#c7c4d7",
+                    "primary-container": "#8083ff",
+                    "on-secondary-fixed": "#23005c",
+                    "surface-container-low": "#0b1c30",
+                    "secondary-container": "#571bc1",
+                    "outline": "#908fa0",
+                    "primary": "#c0c1ff",
+                    "inverse-on-surface": "#213145",
+                    "on-tertiary": "#313030",
+                    "on-tertiary-fixed-variant": "#474646",
+                    "background": "#031427",
+                    "secondary": "#d0bcff",
+                    "primary-fixed": "#e1e0ff",
+                    "on-surface": "#d3e4fe",
+                    "outline-variant": "#464554",
+                    "on-tertiary-container": "#2a2a29",
+                    "error-container": "#93000a",
+                    "surface": "#031427",
+                    "tertiary-container": "#929090",
+                    "secondary-fixed": "#e9ddff",
+                    "surface-container-lowest": "#000f21",
+                    "on-secondary-container": "#c4abff",
+                    "tertiary-fixed-dim": "#c9c6c5",
+                    "surface-variant": "#26364a",
+                    "on-secondary": "#3c0091",
+                    "surface-container-highest": "#26364a",
+                    "surface-container-high": "#1b2b3f",
+                    "tertiary": "#c9c6c5",
+                    "on-primary": "#1000a9",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#e5e2e1",
+                    "on-primary-container": "#0d0096",
+                    "inverse-primary": "#494bd6",
+                    "on-primary-fixed": "#07006c",
+                    "surface-dim": "#031427",
+                    "on-background": "#d3e4fe",
+                    "error": "#ffb4ab",
+                    "on-tertiary-fixed": "#1c1b1b",
+                    "on-error": "#690005",
+                    "surface-tint": "#c0c1ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-xl": "64px",
+                    "container-max": "1280px",
+                    "gutter": "24px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "margin-desktop": "48px",
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["Geist"],
+                    "headline-xl": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "code": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "code": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom scrollbar for data tables to maintain minimal aesthetic */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #464554; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #908fa0; }
+        
+        /* Subtle row hover glow */
+        .history-row:hover {
+            box-shadow: inset 0 0 20px rgba(192, 193, 255, 0.05);
+        }
+
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(31, 31, 31, 1);
+            border-bottom: 1px solid rgba(31, 31, 31, 1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden min-h-screen flex selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant py-stack-md z-30">
+<div class="px-gutter mb-stack-md">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">view_in_ar</span>
+</div>
+<span class="font-headline-md text-headline-md font-bold text-primary">PromptLab</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">AI Engine v2.0</span>
+</div>
+<nav class="flex-1 px-stack-sm flex flex-col gap-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="#">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                Optimize Prompt
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Analyze Prompt
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="#">
+<span class="material-symbols-outlined">auto_awesome_motion</span>
+                Templates
+            </a>
+<div class="my-2 border-t border-outline-variant/50"></div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-variant/30 font-label-md text-label-md opacity-80 duration-150 cursor-pointer" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+                History
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="#">
+<span class="material-symbols-outlined" id="saved-icon">bookmark</span>
+                Saved Prompts
+            </a>
+</nav>
+<div class="px-stack-sm mt-auto flex flex-col gap-1 pt-stack-sm border-t border-outline-variant/50">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+                Profile
+            </a>
+<button class="mt-4 mx-3 py-2 rounded-DEFAULT bg-surface-variant text-primary border border-outline-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md flex justify-center items-center gap-2">
+                Upgrade to Pro
+            </button>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-0 md:ml-64 flex flex-col min-h-screen relative">
+<!-- TopNavBar -->
+<nav class="hidden md:flex bg-surface/70 dark:bg-surface/70 backdrop-blur-xl fixed top-0 right-0 w-[calc(100%-16rem)] border-b border-outline-variant/30 justify-between items-center h-16 px-gutter z-40">
+<div class="flex-1 flex items-center">
+<div class="relative w-64 group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-[#050505] border border-outline-variant rounded-DEFAULT py-1.5 pl-9 pr-3 text-body-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="Search prompts..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-variant hover:scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-variant hover:scale-95 duration-200">
+<span class="material-symbols-outlined">help</span>
+</button>
+<img alt="User profile avatar" class="w-8 h-8 rounded-full border border-outline-variant/50 object-cover cursor-pointer hover:border-primary transition-colors" data-alt="A detailed headshot of a futuristic user profile avatar, showcasing a glowing geometric tech motif on a dark minimalist background, glowing with soft neon indigo and violet light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvLSAInHkou1ELgvQIUYv9n_dQRR1i8mSeesXS6bnQVnithYf73KmigrU6J_q3YNLCETZCQy2PBkm2u9fCDe2r5yth1iv2pk4IHAvt5i3Fpi9hlyh9Q0CcKNr_G8gHoU6FMdTeuH_tS-sUtkh7aZmZ02ZMWalLzRjfA8GAXDJmToDpu8KaQNt_Wg4s4kl4TDcNFU_xu34bMfE1M29ayUFWvsn00kv46OJpQVgaZbrNx6bcu1f2MlQs4Q">
+</div>
+</nav>
+<!-- Background Atmospheric Element -->
+<div class="absolute top-0 right-0 w-full h-[500px] opacity-20 pointer-events-none" style="background: radial-gradient(circle at 80% 20%, rgba(87, 27, 193, 0.4) 0%, transparent 60%); z-index: 0;"></div>
+<!-- Canvas Area -->
+<main class="flex-1 mt-16 p-margin-mobile md:p-margin-desktop w-full max-w-container-max mx-auto z-10 flex flex-col">
+<!-- Page Header -->
+<div class="mb-stack-lg flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-semibold text-on-surface tracking-tight mb-2">Prompt History</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Review, copy, or analyze past generations and optimizations from your workspace.</p>
+</div>
+<!-- Filters / Tooling Row -->
+<div class="flex flex-wrap items-center gap-3">
+<div class="relative">
+<select class="appearance-none bg-[#050505] border border-outline-variant rounded-lg py-2 pl-4 pr-10 font-label-md text-label-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer hover:border-outline shadow-sm shadow-black/20">
+<option value="">All Models</option>
+<option value="gpt4">GPT-4 Turbo</option>
+<option value="claude">Claude 3 Opus</option>
+<option value="gemini">Gemini Pro</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+<div class="relative">
+<select class="appearance-none bg-[#050505] border border-outline-variant rounded-lg py-2 pl-4 pr-10 font-label-md text-label-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer hover:border-outline shadow-sm shadow-black/20">
+<option value="">Any Score</option>
+<option value="high">High (&gt;85)</option>
+<option value="medium">Medium (60-85)</option>
+<option value="low">Needs Work (&lt;60)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+<div class="relative">
+<select class="appearance-none bg-[#050505] border border-outline-variant rounded-lg py-2 pl-4 pr-10 font-label-md text-label-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer hover:border-outline shadow-sm shadow-black/20">
+<option value="7">Last 7 Days</option>
+<option value="24">Last 24 Hours</option>
+<option value="30">Last 30 Days</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+<button class="flex items-center justify-center p-2 rounded-lg bg-[#050505] border border-outline-variant text-on-surface hover:text-primary hover:border-primary transition-colors shadow-sm shadow-black/20" title="Sort: Newest First">
+<span class="material-symbols-outlined text-[20px]">sort</span>
+</button>
+</div>
+</div>
+<!-- Data Table Container (Glassmorphism) -->
+<div class="w-full rounded-xl overflow-hidden glass-panel shadow-[0_8px_30px_rgb(0,0,0,0.12)]" id="history-table-container">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container/50 border-b border-outline-variant/50">
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium whitespace-nowrap">Prompt Detail</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium whitespace-nowrap">AI Model</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium whitespace-nowrap text-center">Score</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium whitespace-nowrap">Date</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant font-medium whitespace-nowrap text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="history-row group transition-colors duration-200">
+<td class="py-4 px-4 max-w-md">
+<div class="font-body-md text-body-md text-on-surface font-medium truncate mb-1">E-commerce Product Description Generator</div>
+<div class="text-on-surface-variant truncate font-code text-code opacity-80">Act as an expert copywriter. Write a persuasive, SEO-optimized product description for a...</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-container/10 border border-primary/20 text-primary font-label-md text-[12px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        GPT-4 Turbo
+                                    </span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-center">
+<div class="flex items-center justify-center gap-2">
+<div class="relative w-8 h-8 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 transform" viewBox="0 0 36 36">
+<path class="text-outline-variant/30" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-[#4ade80]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="94, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-label-md text-[11px] font-bold text-on-surface">94</span>
+</div>
+<div class="bg-[#4ade80]/10 text-[#4ade80] px-1.5 py-0.5 rounded text-[10px] font-bold border border-[#4ade80]/20">+52</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-on-surface-variant">2 hrs ago</td>
+<td class="py-4 px-4 whitespace-nowrap text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-primary-container/10 transition-colors" onclick="openDetailsModal()" title="View Details">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-primary-container/10 transition-colors" onclick="reusePrompt()" title="Reuse">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-error hover:bg-error-container/10 transition-colors" onclick="deleteRow(this)" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="history-row group transition-colors duration-200 bg-surface-container-highest/10">
+<td class="py-4 px-4 max-w-md">
+<div class="font-body-md text-body-md text-on-surface font-medium truncate mb-1">React Component Refactoring Agent</div>
+<div class="text-on-surface-variant truncate font-code text-code opacity-80">Analyze the following legacy React class component and refactor it into a functional component using hooks...</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container/10 border border-secondary/20 text-secondary font-label-md text-[12px]">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                        Claude 3 Opus
+                                    </span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-center">
+<div class="flex items-center justify-center gap-2">
+<div class="relative w-8 h-8 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 transform" viewBox="0 0 36 36">
+<path class="text-outline-variant/30" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-[#fbbf24]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="72, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-label-md text-[11px] font-bold text-on-surface">72</span>
+</div>
+<div class="bg-[#fbbf24]/10 text-[#fbbf24] px-1.5 py-0.5 rounded text-[10px] font-bold border border-[#fbbf24]/20">+15</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-on-surface-variant">Yesterday</td>
+<td class="py-4 px-4 whitespace-nowrap text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-primary-container/10 transition-colors" onclick="openDetailsModal()" title="View Details">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-primary-container/10 transition-colors" onclick="reusePrompt()" title="Reuse">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-error hover:bg-error-container/10 transition-colors" onclick="deleteRow(this)" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="history-row group transition-colors duration-200">
+<td class="py-4 px-4 max-w-md">
+<div class="font-body-md text-body-md text-on-surface font-medium truncate mb-1">System Prompt: Data Extraction Pipeline</div>
+<div class="text-on-surface-variant truncate font-code text-code opacity-80">You are a strict JSON parser. Read the following unstructured text and extract entities matching this schema: { name, date, amount }...</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-container/10 border border-primary/20 text-primary font-label-md text-[12px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        GPT-4 Turbo
+                                    </span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-center">
+<div class="flex items-center justify-center gap-2">
+<div class="relative w-8 h-8 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 transform" viewBox="0 0 36 36">
+<path class="text-outline-variant/30" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-[#4ade80]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="98, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-label-md text-[11px] font-bold text-on-surface">98</span>
+</div>
+<div class="bg-[#4ade80]/10 text-[#4ade80] px-1.5 py-0.5 rounded text-[10px] font-bold border border-[#4ade80]/20">+22</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-on-surface-variant">Oct 24, 2023</td>
+<td class="py-4 px-4 whitespace-nowrap text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-primary-container/10 transition-colors" onclick="openDetailsModal()" title="View Details">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-primary-container/10 transition-colors" onclick="reusePrompt()" title="Reuse">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-error hover:bg-error-container/10 transition-colors" onclick="deleteRow(this)" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="history-row group transition-colors duration-200 bg-surface-container-highest/10">
+<td class="py-4 px-4 max-w-md">
+<div class="font-body-md text-body-md text-on-surface font-medium truncate mb-1">Creative Writing Prompt: Sci-Fi Intro</div>
+<div class="text-on-surface-variant truncate font-code text-code opacity-80">Write the opening paragraph of a hard sci-fi novel set on a rogue planet drifting between star systems. Focus on atmospheric isolation...</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-outline-variant/20 border border-outline/20 text-on-surface-variant font-label-md text-[12px]">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                                        Gemini Pro
+                                    </span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-center">
+<div class="flex items-center justify-center gap-2">
+<div class="relative w-8 h-8 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 transform" viewBox="0 0 36 36">
+<path class="text-outline-variant/30" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-[#ef4444]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="45, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute inset-0 flex items-center justify-center font-label-md text-[11px] font-bold text-on-surface">45</span>
+</div>
+<div class="bg-[#ef4444]/10 text-[#ef4444] px-1.5 py-0.5 rounded text-[10px] font-bold border border-[#ef4444]/20">+5</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-on-surface-variant">Oct 21, 2023</td>
+<td class="py-4 px-4 whitespace-nowrap text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-primary-container/10 transition-colors" onclick="openDetailsModal()" title="View Details">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-primary-container/10 transition-colors" onclick="reusePrompt()" title="Reuse">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-error hover:bg-error-container/10 transition-colors" onclick="deleteRow(this)" title="Delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer of Table -->
+<div class="bg-surface-container/50 py-3 px-4 border-t border-outline-variant/30 flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1 to 4 of 124 entries</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled="">Prev</button>
+<button class="px-3 py-1 rounded bg-primary text-on-primary font-medium shadow-sm">1</button>
+<button class="px-3 py-1 rounded border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors">2</button>
+<button class="px-3 py-1 rounded border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors">3</button>
+<span class="px-2 py-1 text-on-surface-variant">...</span>
+<button class="px-3 py-1 rounded border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors">Next</button>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default) -->
+<div class="hidden flex-col items-center justify-center py-stack-xl glass-panel rounded-xl mt-8" id="empty-state">
+<span class="material-symbols-outlined text-6xl text-outline-variant mb-4">history_toggle_off</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">No history yet</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-center max-w-sm mb-6">You haven't optimized any prompts yet. Start refining your AI instructions to build your history.</p>
+<button class="px-6 py-3 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-fixed transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                Start Optimizing
+            </button>
+</div>
+<!-- Details Modal -->
+<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300" id="details-modal">
+<div class="w-full max-w-4xl max-h-[90vh] bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-2xl flex flex-col transform scale-95 transition-transform duration-300" id="details-modal-content">
+<div class="p-6 border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                    Optimization Analysis
+                </h3>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors" onclick="closeDetailsModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-6 overflow-y-auto flex-1">
+<!-- Why This Is Better Section (Replicated from Screen 2) -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Why This Is Better</h4>
+<p class="text-body-sm text-on-surface-variant mt-1">A detailed breakdown of how your prompt was enhanced for better AI performance.</p>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-high p-3 rounded-lg border border-outline-variant/30">
+<div class="text-center px-4 border-r border-outline-variant/30">
+<div class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Original</div>
+<div class="text-headline-md font-bold text-on-surface-variant/70">42<span class="text-sm font-normal">/100</span></div>
+</div>
+<div class="text-center px-4">
+<div class="text-xs text-primary uppercase tracking-wider mb-1">Optimized</div>
+<div class="text-headline-md font-bold text-primary">94<span class="text-sm font-normal">/100</span></div>
+</div>
+<div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold border border-primary/20">
+                            Improvement: +52 points
+                        </div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+<!-- Visual Score Breakdown -->
+<div class="flex flex-col gap-4">
+<h5 class="font-label-md text-label-md text-on-surface uppercase tracking-widest opacity-70">Score Breakdown</h5>
+<div class="space-y-4">
+<div class="space-y-1">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Clarity</span>
+<span class="text-primary font-bold">96%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5"><div class="bg-primary h-full rounded-full w-[96%]"></div></div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Context</span>
+<span class="text-primary font-bold">90%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5"><div class="bg-primary h-full rounded-full w-[90%]"></div></div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Specificity</span>
+<span class="text-primary font-bold">92%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5"><div class="bg-primary h-full rounded-full w-[92%]"></div></div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Structure</span>
+<span class="text-primary font-bold">95%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5"><div class="bg-primary h-full rounded-full w-[95%]"></div></div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Constraints</span>
+<span class="text-primary font-bold">88%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5"><div class="bg-primary h-full rounded-full w-[88%]"></div></div>
+</div>
+</div>
+</div>
+<!-- Detailed Analysis Points -->
+<div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<div>
+<h6 class="text-sm font-bold text-on-surface">Clarity &amp; Precision</h6>
+<p class="text-xs text-on-surface-variant leading-relaxed mt-1">Replaced vague verbs like "write about" with specific directives like "create a comprehensive 1500-word analysis".</p>
+</div>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<div>
+<h6 class="text-sm font-bold text-on-surface">Contextual Depth</h6>
+<p class="text-xs text-on-surface-variant leading-relaxed mt-1">Added a Senior Technical Writer persona and defined the target audience as healthcare administrators.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<div>
+<h6 class="text-sm font-bold text-on-surface">Structural Framework</h6>
+<p class="text-xs text-on-surface-variant leading-relaxed mt-1">Implemented the Role-Task-Context-Constraints framework for logical flow and better AI adherence.</p>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+<div>
+<h6 class="text-sm font-bold text-on-surface">Constraint Enforcement</h6>
+<p class="text-xs text-on-surface-variant leading-relaxed mt-1">Defined explicit word counts, professional tone requirements, and Markdown formatting rules.</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/20">
+<h6 class="text-xs font-bold text-primary uppercase tracking-wider mb-3">Key Changes</h6>
+<ul class="space-y-2">
+<li class="text-xs text-on-surface-variant flex items-center gap-2">
+<div class="w-1 h-1 rounded-full bg-primary"></div> Added Senior Developer persona
+                                    </li>
+<li class="text-xs text-on-surface-variant flex items-center gap-2">
+<div class="w-1 h-1 rounded-full bg-primary"></div> Defined 1500-word limit
+                                    </li>
+<li class="text-xs text-on-surface-variant flex items-center gap-2">
+<div class="w-1 h-1 rounded-full bg-primary"></div> Structured into markdown
+                                    </li>
+<li class="text-xs text-on-surface-variant flex items-center gap-2">
+<div class="w-1 h-1 rounded-full bg-primary"></div> Added data privacy constraints
+                                    </li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-6 border-t border-outline-variant/30 bg-surface-container-lowest flex justify-end gap-3">
+<button class="px-4 py-2 rounded border border-outline-variant text-on-surface hover:bg-surface-variant transition-colors" onclick="closeDetailsModal()">Close</button>
+<button class="px-4 py-2 rounded bg-primary text-on-primary font-bold hover:bg-primary-fixed transition-colors flex items-center gap-2" onclick="reusePrompt()">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                    Reuse Prompt
+                </button>
+</div>
+</div>
+</div>
+<!-- Reuse Feedback Overlay -->
+<div class="fixed inset-0 bg-primary/10 backdrop-blur-sm z-[60] flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-300" id="reuse-overlay">
+<div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(192,193,255,0.5)]">
+<span class="material-symbols-outlined text-on-primary text-3xl">auto_fix_high</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Loading into Optimizer...</h2>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-stack-lg bg-surface-container-lowest border-t border-outline-variant mt-auto z-10">
+<div class="max-w-container-max mx-auto px-margin-desktop flex justify-between items-center transition-opacity">
+<div class="font-label-md text-label-md font-bold text-on-surface">
+                    PromptLab
+                </div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+                    © 2024 PromptLab AI. Professional Prompt Engineering Workspace.
+                </div>
+<div class="flex gap-4">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline" href="#">Documentation</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline" href="#">API Status</a>
+</div>
+</div>
+</footer>
+</div>
+<script>
+        function deleteRow(btn) {
+            const row = btn.closest('tr');
+            row.style.opacity = '0';
+            row.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                row.remove();
+                checkEmptyState();
+            }, 300);
+        }
+
+        function checkEmptyState() {
+            const tbody = document.querySelector('tbody');
+            if (tbody.children.length === 0) {
+                document.getElementById('history-table-container').classList.add('hidden');
+                document.getElementById('empty-state').classList.remove('hidden');
+                document.getElementById('empty-state').classList.add('flex');
+            }
+        }
+
+        function openDetailsModal() {
+            const modal = document.getElementById('details-modal');
+            const content = document.getElementById('details-modal-content');
+            modal.classList.remove('hidden');
+            // Small delay to allow display:block to apply before animating opacity
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeDetailsModal() {
+            const modal = document.getElementById('details-modal');
+            const content = document.getElementById('details-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function reusePrompt() {
+            closeDetailsModal();
+            const overlay = document.getElementById('reuse-overlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+            }, 10);
+            
+            // Simulate redirect to optimizer screen
+            setTimeout(() => {
+                overlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    // In a real app, this would be window.location.href = '/optimize'
+                }, 300);
+            }, 1500);
+        }
+    </script>
+</body></html>

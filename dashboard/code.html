@@ -1,0 +1,338 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PromptLab Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "secondary-fixed-dim": "#d0bcff",
+                            "inverse-surface": "#d3e4fe",
+                            "primary-fixed-dim": "#c0c1ff",
+                            "surface-bright": "#2a3a4f",
+                            "surface-container": "#102034",
+                            "on-secondary-fixed-variant": "#5516be",
+                            "on-surface-variant": "#c7c4d7",
+                            "primary-container": "#8083ff",
+                            "on-secondary-fixed": "#23005c",
+                            "surface-container-low": "#0b1c30",
+                            "secondary-container": "#571bc1",
+                            "outline": "#908fa0",
+                            "primary": "#c0c1ff",
+                            "inverse-on-surface": "#213145",
+                            "on-tertiary": "#313030",
+                            "on-tertiary-fixed-variant": "#474646",
+                            "background": "#031427",
+                            "secondary": "#d0bcff",
+                            "primary-fixed": "#e1e0ff",
+                            "on-surface": "#d3e4fe",
+                            "outline-variant": "#464554",
+                            "on-tertiary-container": "#2a2a29",
+                            "error-container": "#93000a",
+                            "surface": "#031427",
+                            "tertiary-container": "#929090",
+                            "secondary-fixed": "#e9ddff",
+                            "surface-container-lowest": "#000f21",
+                            "on-secondary-container": "#c4abff",
+                            "tertiary-fixed-dim": "#c9c6c5",
+                            "surface-variant": "#26364a",
+                            "on-secondary": "#3c0091",
+                            "surface-container-highest": "#26364a",
+                            "surface-container-high": "#1b2b3f",
+                            "tertiary": "#c9c6c5",
+                            "on-primary": "#1000a9",
+                            "on-primary-fixed-variant": "#2f2ebe",
+                            "on-error-container": "#ffdad6",
+                            "tertiary-fixed": "#e5e2e1",
+                            "on-primary-container": "#0d0096",
+                            "inverse-primary": "#494bd6",
+                            "on-primary-fixed": "#07006c",
+                            "surface-dim": "#031427",
+                            "on-background": "#d3e4fe",
+                            "error": "#ffb4ab",
+                            "on-tertiary-fixed": "#1c1b1b",
+                            "on-error": "#690005",
+                            "surface-tint": "#c0c1ff"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "stack-xl": "64px",
+                            "container-max": "1280px",
+                            "gutter": "24px",
+                            "stack-lg": "32px",
+                            "stack-md": "16px",
+                            "margin-desktop": "48px",
+                            "margin-mobile": "16px",
+                            "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                            "label-md": ["Geist"],
+                            "headline-xl": ["Inter"],
+                            "body-md": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "body-sm": ["Inter"],
+                            "headline-lg": ["Inter"],
+                            "headline-md": ["Inter"],
+                            "headline-lg-mobile": ["Inter"],
+                            "code": ["jetbrainsMono"]
+                    },
+                    "fontSize": {
+                            "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                            "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                            "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}],
+                            "body-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+                            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                            "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "600"}],
+                            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                            "code": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top-color: rgba(255, 255, 255, 0.2);
+            border-left-color: rgba(255, 255, 255, 0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #494bd6, #571bc1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<nav class="hidden md:flex h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant flex-col py-stack-md z-50">
+<div class="px-gutter mb-stack-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">PromptLab</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">AI Engine v2.0</p>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-4">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-variant/50 font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors opacity-80 duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Overview
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                        Optimize Prompt
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                        Analyze Prompt
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">auto_awesome_motion</span>
+                        Templates
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+                        History
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+                        Saved Prompts
+                    </a>
+</li>
+</ul>
+</div>
+<div class="px-4 mt-auto space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+                Profile
+            </a>
+<div class="pt-4 mt-4 border-t border-outline-variant/30">
+<button class="w-full py-3 rounded-lg btn-primary font-label-md text-label-md text-white font-semibold transition-transform hover:scale-[1.02]">
+                    Upgrade to Pro
+                </button>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-0 md:ml-64 flex flex-col min-h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] bg-surface/70 dark:bg-surface/70 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center h-16 px-gutter z-40">
+<div class="flex-1 flex items-center">
+<!-- Search on left -->
+<div class="relative w-full max-w-md hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-[#050505] border border-slate-900 rounded-full py-2 pl-10 pr-4 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search prompts, templates..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<img class="w-9 h-9 rounded-full object-cover border border-outline-variant" data-alt="A minimalist, futuristic avatar representing a digital persona in a premium SaaS product. The profile picture features an abstract geometric pattern with soft indigo and deep violet tones against a dark background, reflecting a smart and innovative AI technology environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_MaZixuJ4obXnf06xtel4H0UUlEQjSwkpIEsGwogPWmu6IgPCpzMmZOc-YKQNDTY4DffOsH_1A-W59NaQiiUEb7C2BKbpra8NBudLJu2zflBoGI23IGkSnVdk-nHtBx9gJthh1YgmU2Sx3sNPNNhLCBbhRWndxrmcRX8bnAl7NZvlSn_qdQ_GUQJSKfKTkXnRFxI8758AkyCDyDmRMpESdUeEL1vtVj5zjVBFC_kjcNmOnVibNzKOjQ">
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 overflow-y-auto pt-24 pb-stack-xl px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto">
+<!-- Greeting -->
+<div class="mb-stack-lg">
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">Good evening, Apoorva 👋</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Here's a summary of your AI prompt performance today.</p>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Main CTA Card -->
+<div class="col-span-1 md:col-span-8 glass-card rounded-xl p-8 relative overflow-hidden flex flex-col justify-center min-h-[240px]">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent pointer-events-none"></div>
+<div class="relative z-10 w-full max-w-lg">
+<h3 class="font-headline-md text-headline-md font-semibold text-on-surface mb-4">Ready to improve your next prompt?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Our advanced AI engine analyzes and optimizes your instructions for maximum output precision across all major language models.</p>
+<button class="px-6 py-3 rounded-lg btn-primary font-label-md text-label-md text-white font-semibold flex items-center gap-2 w-max hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                            Optimize Prompt
+                        </button>
+</div>
+</div>
+<!-- Stats Summary -->
+<div class="col-span-1 md:col-span-4 grid grid-cols-2 gap-4">
+<div class="glass-card rounded-xl p-5 flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary-container mb-2">trending_up</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Optimized</p>
+<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">1,248</p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-5 flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary-container mb-2">speed</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Avg Score</p>
+<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">94<span class="text-body-sm font-normal text-on-surface-variant">/100</span></p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-5 flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary-container mb-2">bookmark</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Saved</p>
+<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">342</p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-5 flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary-container mb-2">auto_awesome_motion</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Templates</p>
+<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">86</p>
+</div>
+</div>
+</div>
+<!-- Chart Section -->
+<div class="col-span-1 md:col-span-8 glass-card rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Optimization Activity</h3>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-variant px-3 py-1 rounded-full">Last 7 Days</span>
+</div>
+<!-- Placeholder for line chart -->
+<div class="w-full h-64 border-b border-l border-outline-variant/30 relative flex items-end justify-between px-4 pb-4 pt-10">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none"></div>
+<!-- Mock Bars/Line nodes -->
+<div class="w-2 h-12 bg-primary-container rounded-t-sm opacity-60"></div>
+<div class="w-2 h-24 bg-primary-container rounded-t-sm opacity-60"></div>
+<div class="w-2 h-16 bg-primary-container rounded-t-sm opacity-60"></div>
+<div class="w-2 h-32 bg-primary-container rounded-t-sm opacity-80"></div>
+<div class="w-2 h-20 bg-primary-container rounded-t-sm opacity-60"></div>
+<div class="w-2 h-40 bg-primary-container rounded-t-sm opacity-100"></div>
+<div class="w-2 h-28 bg-primary-container rounded-t-sm opacity-70"></div>
+</div>
+</div>
+<!-- Recent Prompts -->
+<div class="col-span-1 md:col-span-4 glass-card rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Recent Prompts</h3>
+<a class="text-primary font-label-md text-label-md hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-4 flex-1">
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-variant/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">description</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium truncate w-32">Data Analysis Script</p>
+<p class="font-label-md text-[11px] text-on-surface-variant">GPT-4 Turbo</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-emerald-400">92/100</span>
+<p class="font-label-md text-[11px] text-on-surface-variant">2h ago</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-variant/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">code</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium truncate w-32">React Component Refactor</p>
+<p class="font-label-md text-[11px] text-on-surface-variant">Claude 3 Opus</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-emerald-400">88/100</span>
+<p class="font-label-md text-[11px] text-on-surface-variant">5h ago</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-variant/50 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">draw</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium truncate w-32">Marketing Copy Gen</p>
+<p class="font-label-md text-[11px] text-on-surface-variant">Gemini 1.5 Pro</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-amber-400">76/100</span>
+<p class="font-label-md text-[11px] text-on-surface-variant">1d ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PromptLab - Turn Simple Ideas Into Powerful AI Prompts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#d0bcff",
+                      "inverse-surface": "#d3e4fe",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "surface-bright": "#2a3a4f",
+                      "surface-container": "#102034",
+                      "on-secondary-fixed-variant": "#5516be",
+                      "on-surface-variant": "#c7c4d7",
+                      "primary-container": "#8083ff",
+                      "on-secondary-fixed": "#23005c",
+                      "surface-container-low": "#0b1c30",
+                      "secondary-container": "#571bc1",
+                      "outline": "#908fa0",
+                      "primary": "#c0c1ff",
+                      "inverse-on-surface": "#213145",
+                      "on-tertiary": "#313030",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "background": "#031427",
+                      "secondary": "#d0bcff",
+                      "primary-fixed": "#e1e0ff",
+                      "on-surface": "#d3e4fe",
+                      "outline-variant": "#464554",
+                      "on-tertiary-container": "#2a2a29",
+                      "error-container": "#93000a",
+                      "surface": "#031427",
+                      "tertiary-container": "#929090",
+                      "secondary-fixed": "#e9ddff",
+                      "surface-container-lowest": "#000f21",
+                      "on-secondary-container": "#c4abff",
+                      "tertiary-fixed-dim": "#c9c6c5",
+                      "surface-variant": "#26364a",
+                      "on-secondary": "#3c0091",
+                      "surface-container-highest": "#26364a",
+                      "surface-container-high": "#1b2b3f",
+                      "tertiary": "#c9c6c5",
+                      "on-primary": "#1000a9",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed": "#e5e2e1",
+                      "on-primary-container": "#0d0096",
+                      "inverse-primary": "#494bd6",
+                      "on-primary-fixed": "#07006c",
+                      "surface-dim": "#031427",
+                      "on-background": "#d3e4fe",
+                      "error": "#ffb4ab",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-error": "#690005",
+                      "surface-tint": "#c0c1ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-xl": "64px",
+                      "container-max": "1280px",
+                      "gutter": "24px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "margin-desktop": "48px",
+                      "margin-mobile": "16px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Geist"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "code": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "code": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(31, 31, 31, 0.8);
+            border-bottom: 1px solid rgba(31, 31, 31, 0.8);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #c0c1ff, #d0bcff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .primary-gradient-btn {
+            background: linear-gradient(135deg, #494bd6, #571bc1);
+            transition: all 0.3s ease;
+        }
+        .primary-gradient-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 15px rgba(87, 27, 193, 0.5);
+        }
+        .shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-20deg);
+            animation: shimmer-animation 3s infinite;
+        }
+        @keyframes shimmer-animation {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNav Navigation Shell Exclusion: Landing page doesn't need full app nav -->
+<header class="fixed top-0 left-0 right-0 h-16 px-gutter z-50 flex justify-between items-center bg-surface/70 backdrop-blur-xl border-b border-outline-variant/30">
+<div class="flex items-center gap-2">
+<img alt="PromptLab Logo" class="w-8 h-8 rounded-DEFAULT" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg25un4uQM9Wg3J7DN4vL0u70mh5WspTKiWvQYeTIwIexvQPjM4N-sNiu955DxLbBawBkqrdfdI41Ryk15WMMxbHUF_3c59zmogkLEnX6d-UFheMJGcfyhDwV1CEB7ozhsu4q3UJVYdfpGMiTFpX4vGqgBBCBuU15k9YqJnHbXEAbsmo9jVyJN_Hijvj1b9cPnCWveuz0TER4DiVDnJIagjPbdHAgrilU9uPujsQzL8GnTFeBrJ0Jr8g">
+<span class="font-headline-md text-headline-md font-bold text-primary">PromptLab</span>
+</div>
+<nav class="hidden md:flex gap-8">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#features">Features</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#how-it-works">How it Works</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#pricing">Pricing</a>
+</nav>
+<div class="flex items-center gap-4">
+<a class="font-label-md text-label-md text-on-surface hover:text-primary transition-colors hidden sm:block" href="/login">Log In</a>
+<a class="font-label-md text-label-md px-4 py-2 rounded-lg primary-gradient-btn text-white" href="/signup">Start Free</a>
+</div>
+</header>
+<main class="flex-grow pt-32 pb-stack-xl flex flex-col items-center">
+<!-- Hero Section -->
+<section class="w-full max-w-container-max px-margin-mobile md:px-margin-desktop flex flex-col items-center text-center gap-stack-lg mb-stack-xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-md text-label-md mb-4">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+<span>PromptLab Engine v2.0 is Live</span>
+</div>
+<h1 class="font-headline-xl text-headline-lg-mobile md:text-headline-xl max-w-4xl text-on-background">
+                Turn Simple Ideas Into <br class="hidden sm:block">
+<span class="gradient-text">Powerful AI Prompts.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                PromptLab analyzes, improves, and optimizes your prompts for better AI responses. Stop guessing and start generating high-quality outputs instantly.
+            </p>
+<div class="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
+<button class="primary-gradient-btn text-white font-label-md text-label-md px-8 py-4 rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                    Optimize Your Prompt
+                </button>
+<button class="glass-panel text-on-surface font-label-md text-label-md px-8 py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors w-full sm:w-auto">
+<span class="material-symbols-outlined">explore</span>
+                    Explore Templates
+                </button>
+</div>
+<!-- Hero Visual: Interactive Transformation Card -->
+<div class="w-full max-w-5xl mt-stack-lg glass-panel rounded-xl p-1 relative overflow-hidden text-left shimmer">
+<div class="bg-surface-container-lowest rounded-lg p-stack-md flex flex-col md:flex-row gap-stack-md relative z-10">
+<!-- Before -->
+<div class="flex-1 flex flex-col gap-2 p-4 rounded-lg border border-outline-variant/30 bg-surface-container/50">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-xs">Original Prompt</span>
+<span class="px-2 py-0.5 rounded-full bg-error/10 text-error text-[10px] font-label-md border border-error/20">Poor Context</span>
+</div>
+<p class="font-code text-code text-on-surface opacity-70">"make me a study plan for python"</p>
+</div>
+<!-- Arrow/Divider -->
+<div class="flex items-center justify-center -my-2 md:-mx-2 md:my-0 z-20">
+<div class="w-10 h-10 rounded-full primary-gradient-btn flex items-center justify-center shadow-lg border border-white/10 rotate-90 md:rotate-0">
+<span class="material-symbols-outlined text-white">arrow_forward</span>
+</div>
+</div>
+<!-- After -->
+<div class="flex-1 flex flex-col gap-3 p-4 rounded-lg border border-primary/30 bg-primary/5 relative">
+<div class="flex justify-between items-center mb-1">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider text-xs font-bold">Optimized Output</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[10px] font-label-md border border-primary/30">Ready</span>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="font-label-md text-xs font-bold">Score: 94/100</span>
+</div>
+</div>
+<div class="space-y-2">
+<div>
+<span class="font-code text-[12px] text-secondary">Role:</span>
+<span class="font-code text-[12px] text-on-surface">Act as a Senior Python Developer and Technical Educator.</span>
+</div>
+<div>
+<span class="font-code text-[12px] text-secondary">Task:</span>
+<span class="font-code text-[12px] text-on-surface">Create a comprehensive 4-week study plan for a beginner.</span>
+</div>
+<div class="hidden sm:block">
+<span class="font-code text-[12px] text-secondary">Constraints:</span>
+<span class="font-code text-[12px] text-on-surface">Focus on core concepts, OOP, and one practical project. 1 hour/day.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer from JSON -->
+<footer class="bg-surface-container-lowest w-full py-stack-lg border-t border-outline-variant mt-auto">
+<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-2">
+<img alt="PromptLab Logo" class="w-6 h-6 rounded-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg25un4uQM9Wg3J7DN4vL0u70mh5WspTKiWvQYeTIwIexvQPjM4N-sNiu955DxLbBawBkqrdfdI41Ryk15WMMxbHUF_3c59zmogkLEnX6d-UFheMJGcfyhDwV1CEB7ozhsu4q3UJVYdfpGMiTFpX4vGqgBBCBuU15k9YqJnHbXEAbsmo9jVyJN_Hijvj1b9cPnCWveuz0TER4DiVDnJIagjPbdHAgrilU9uPujsQzL8GnTFeBrJ0Jr8g">
+<span>PromptLab</span>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline transition-opacity" href="#">Documentation</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline transition-opacity" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline transition-opacity" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline transition-opacity" href="#">API Status</a>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+                © 2024 PromptLab AI. Professional Prompt Engineering Workspace.
+            </div>
+</div>
+</footer>
+</body></html>

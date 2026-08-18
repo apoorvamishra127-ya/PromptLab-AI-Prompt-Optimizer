@@ -1,0 +1,343 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Settings - PromptLab AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#d0bcff",
+                      "inverse-surface": "#d3e4fe",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "surface-bright": "#2a3a4f",
+                      "surface-container": "#102034",
+                      "on-secondary-fixed-variant": "#5516be",
+                      "on-surface-variant": "#c7c4d7",
+                      "primary-container": "#8083ff",
+                      "on-secondary-fixed": "#23005c",
+                      "surface-container-low": "#0b1c30",
+                      "secondary-container": "#571bc1",
+                      "outline": "#908fa0",
+                      "primary": "#c0c1ff",
+                      "inverse-on-surface": "#213145",
+                      "on-tertiary": "#313030",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "background": "#031427",
+                      "secondary": "#d0bcff",
+                      "primary-fixed": "#e1e0ff",
+                      "on-surface": "#d3e4fe",
+                      "outline-variant": "#464554",
+                      "on-tertiary-container": "#2a2a29",
+                      "error-container": "#93000a",
+                      "surface": "#031427",
+                      "tertiary-container": "#929090",
+                      "secondary-fixed": "#e9ddff",
+                      "surface-container-lowest": "#000f21",
+                      "on-secondary-container": "#c4abff",
+                      "tertiary-fixed-dim": "#c9c6c5",
+                      "surface-variant": "#26364a",
+                      "on-secondary": "#3c0091",
+                      "surface-container-highest": "#26364a",
+                      "surface-container-high": "#1b2b3f",
+                      "tertiary": "#c9c6c5",
+                      "on-primary": "#1000a9",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed": "#e5e2e1",
+                      "on-primary-container": "#0d0096",
+                      "inverse-primary": "#494bd6",
+                      "on-primary-fixed": "#07006c",
+                      "surface-dim": "#031427",
+                      "on-background": "#d3e4fe",
+                      "error": "#ffb4ab",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-error": "#690005",
+                      "surface-tint": "#c0c1ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-xl": "64px",
+                      "container-max": "1280px",
+                      "gutter": "24px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "margin-desktop": "48px",
+                      "margin-mobile": "16px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "label-md": ["Geist"],
+                      "headline-xl": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "code": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "code": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #031427;
+            color: #d3e4fe;
+        }
+        
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-glass {
+            background: #050505;
+            border: 1px solid #1F1F1F;
+            transition: all 0.3s ease;
+        }
+
+        .input-glass:focus {
+            border-color: #c0c1ff;
+            box-shadow: 0 0 10px rgba(192, 193, 255, 0.2);
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #494bd6, #571bc1);
+            border: none;
+            transition: opacity 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .nav-item-active {
+            color: #c0c1ff;
+            font-weight: 700;
+            border-right: 2px solid #c0c1ff;
+        }
+        
+        .nav-item-inactive {
+            color: #c7c4d7;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-item-inactive:hover {
+            background-color: #26364a;
+            color: #d3e4fe;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low dark:bg-surface-container-low h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full py-stack-md z-50">
+<!-- Header -->
+<div class="px-gutter mb-stack-lg flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container font-headline-md">tips_and_updates</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PromptLab</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">AI Engine v2.0</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto">
+<ul class="flex flex-col gap-1">
+<li>
+<a class="flex items-center gap-3 px-gutter py-3 nav-item-inactive font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Overview
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-gutter py-3 nav-item-inactive font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                        Optimize Prompt
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-gutter py-3 nav-item-inactive font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                        Analyze Prompt
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-gutter py-3 nav-item-inactive font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">auto_awesome_motion</span>
+                        Templates
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-gutter py-3 nav-item-inactive font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">history</span>
+                        History
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-gutter py-3 nav-item-inactive font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+                        Saved Prompts
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-gutter py-3 nav-item-active font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+                        Settings
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-gutter py-3 nav-item-inactive font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+                        Profile
+                    </a>
+</li>
+</ul>
+</div>
+<!-- CTA -->
+<div class="px-gutter mt-auto pt-stack-md">
+<button class="w-full py-3 rounded-lg btn-primary text-white font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">bolt</span>
+                Upgrade to Pro
+            </button>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="ml-64 flex-1 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface/70 dark:bg-surface/70 backdrop-blur-xl fixed top-0 right-0 w-[calc(100%-16rem)] border-b border-outline-variant/30 flex justify-between items-center h-16 px-gutter z-40">
+<!-- Search -->
+<div class="flex-1 max-w-md relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-high border-none rounded-full py-2 pl-10 pr-4 text-on-surface focus:ring-1 focus:ring-primary font-body-sm text-body-sm placeholder:text-on-surface-variant/50" placeholder="Search settings..." type="text">
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant cursor-pointer ml-2">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A macro photography shot of a sleek, abstract metallic sphere floating in a dark void. The sphere reflects subtle indigo and violet light, creating a premium, modern AI SaaS aesthetic. High contrast, sharp details, minimalist composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkvDldWEoCLOdEXWjfS8XeVL3dMNJSOwbw2z_PMxt5TZnST19_V9dTX02FoKYuCNAU98rj_OnXdi_YtZArDZopmaoaF_S26pwNEVeiBnlzRMPWo04rgY8XGKudxQP7PHcm7wwMrCi3wyBz2X9CYiYg3EaCEiIg69SjztyEkooZP9keh_bO3hFbPjDgh6G-pAYg2Ylm3jHGAiKci6M-kGjZch1-zaP8A--nkdbalNViujQ_foHy_3CsPw">
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 pt-24 px-margin-desktop pb-stack-xl max-w-container-max mx-auto w-full flex gap-12">
+<!-- Settings Internal Navigation -->
+<aside class="w-48 shrink-0 py-stack-md hidden lg:block sticky top-24 h-max">
+<nav class="flex flex-col gap-2">
+<a class="px-4 py-2 rounded-md bg-surface-variant text-primary font-label-md text-label-md flex items-center gap-2" href="#profile">
+<span class="material-symbols-outlined text-lg">person</span>
+                        Profile
+                    </a>
+<a class="px-4 py-2 rounded-md text-on-surface-variant hover:bg-surface-variant/50 hover:text-on-surface transition-colors font-label-md text-label-md flex items-center gap-2" href="#ai-preferences">
+<span class="material-symbols-outlined text-lg">psychology</span>
+                        AI Preferences
+                    </a>
+<a class="px-4 py-2 rounded-md text-on-surface-variant hover:bg-surface-variant/50 hover:text-on-surface transition-colors font-label-md text-label-md flex items-center gap-2" href="#appearance">
+<span class="material-symbols-outlined text-lg">palette</span>
+                        Appearance
+                    </a>
+<a class="px-4 py-2 rounded-md text-on-surface-variant hover:bg-surface-variant/50 hover:text-on-surface transition-colors font-label-md text-label-md flex items-center gap-2" href="#notifications">
+<span class="material-symbols-outlined text-lg">notifications</span>
+                        Notifications
+                    </a>
+<a class="px-4 py-2 rounded-md text-on-surface-variant hover:bg-surface-variant/50 hover:text-on-surface transition-colors font-label-md text-label-md flex items-center gap-2" href="#security">
+<span class="material-symbols-outlined text-lg">security</span>
+                        Security
+                    </a>
+</nav>
+</aside>
+<!-- Settings Sections -->
+<div class="flex-1 max-w-3xl flex flex-col gap-stack-xl">
+<!-- Profile Section -->
+<section class="glass-panel rounded-xl p-stack-lg" id="profile">
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface mb-stack-md border-b border-outline-variant/30 pb-4">Profile Information</h2>
+<div class="flex items-start gap-8 mb-8">
+<div class="flex flex-col items-center gap-4">
+<div class="w-24 h-24 rounded-full bg-surface-container overflow-hidden border-2 border-surface-variant relative group">
+<img alt="User avatar large" class="w-full h-full object-cover" data-alt="A macro photography shot of a sleek, abstract metallic sphere floating in a dark void. The sphere reflects subtle indigo and violet light, creating a premium, modern AI SaaS aesthetic. High contrast, sharp details, minimalist composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-wGTf07YbQWtcbDgpHfhGHuiQMRuZuYb0NT7yErR9HYtkAs0Fb57KLJp0Tf9pBIdYz-KHkQNxojcl8cZY7rTP5zEaPKG0SdXT4F1hyZbtR6nqzidONb7l1_oQcTnslFeIoUGpzmg19S5pnTWQUkQGcgMSSqXYp8TIZE-fbt9VbyHRMRV-xuEmI5KM_yGfNtEOZvgPYpxK3mb3jIOQpdSl_b9ybal8A5pQRNI1Cc4ElDohP6-YFTZjfA">
+<div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-white">upload</span>
+</div>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline">Change Avatar</button>
+</div>
+<div class="flex-1 flex flex-col gap-6">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Full Name</label>
+<input class="w-full input-glass rounded-md px-4 py-3 text-on-surface font-body-md text-body-md" type="text" value="Alex Chen">
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Email Address</label>
+<input class="w-full input-glass rounded-md px-4 py-3 text-on-surface font-body-md text-body-md" type="email" value="alex.chen@example.com">
+</div>
+</div>
+</div>
+<div class="flex justify-end">
+<button class="btn-primary px-6 py-2 rounded-md text-white font-label-md text-label-md">Save Changes</button>
+</div>
+</section>
+<!-- AI Preferences Section -->
+<section class="glass-panel rounded-xl p-stack-lg" id="ai-preferences">
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface mb-stack-md border-b border-outline-variant/30 pb-4">AI Preferences</h2>
+<div class="flex flex-col gap-6">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Default Generation Model</label>
+<div class="relative">
+<select class="w-full input-glass rounded-md px-4 py-3 text-on-surface font-body-md text-body-md appearance-none cursor-pointer">
+<option value="gpt4">GPT-4 Turbo (High Quality)</option>
+<option value="claude3">Claude 3 Opus (Creative)</option>
+<option value="llama3">Llama 3 70B (Fast)</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Default Optimization Tone</label>
+<div class="relative">
+<select class="w-full input-glass rounded-md px-4 py-3 text-on-surface font-body-md text-body-md appearance-none cursor-pointer">
+<option value="professional">Professional &amp; Direct</option>
+<option value="creative">Creative &amp; Expansive</option>
+<option value="academic">Academic &amp; Detailed</option>
+<option value="concise">Concise &amp; Actionable</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

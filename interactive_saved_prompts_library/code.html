@@ -1,0 +1,262 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PromptLab - Saved Prompts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Assuming Geist font is locally available or imported similarly if required by the exact system, using Inter as fallback for standard web rendering if Geist fails -->
+<style>
+        /* Ensuring Material Symbols render correctly */
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 300,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        /* Custom scrollbar for dark premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #26364a; /* surface-variant */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #464554; /* outline-variant */
+        }
+        
+        /* Shimmer effect for premium AI feel on hover */
+        .ai-shimmer-hover:hover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(192, 193, 255, 0.05), transparent); /* primary with low opacity */
+            transform: skewX(-20deg);
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            100% { left: 200%; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#d0bcff",
+                      "inverse-surface": "#d3e4fe",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "surface-bright": "#2a3a4f",
+                      "surface-container": "#102034",
+                      "on-secondary-fixed-variant": "#5516be",
+                      "on-surface-variant": "#c7c4d7",
+                      "primary-container": "#8083ff",
+                      "on-secondary-fixed": "#23005c",
+                      "surface-container-low": "#0b1c30",
+                      "secondary-container": "#571bc1",
+                      "outline": "#908fa0",
+                      "primary": "#c0c1ff",
+                      "inverse-on-surface": "#213145",
+                      "on-tertiary": "#313030",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "background": "#031427",
+                      "secondary": "#d0bcff",
+                      "primary-fixed": "#e1e0ff",
+                      "on-surface": "#d3e4fe",
+                      "outline-variant": "#464554",
+                      "on-tertiary-container": "#2a2a29",
+                      "error-container": "#93000a",
+                      "surface": "#031427",
+                      "tertiary-container": "#929090",
+                      "secondary-fixed": "#e9ddff",
+                      "surface-container-lowest": "#000f21",
+                      "on-secondary-container": "#c4abff",
+                      "tertiary-fixed-dim": "#c9c6c5",
+                      "surface-variant": "#26364a",
+                      "on-secondary": "#3c0091",
+                      "surface-container-highest": "#26364a",
+                      "surface-container-high": "#1b2b3f",
+                      "tertiary": "#c9c6c5",
+                      "on-primary": "#1000a9",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed": "#e5e2e1",
+                      "on-primary-container": "#0d0096",
+                      "inverse-primary": "#494bd6",
+                      "on-primary-fixed": "#07006c",
+                      "surface-dim": "#031427",
+                      "on-background": "#d3e4fe",
+                      "error": "#ffb4ab",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-error": "#690005",
+                      "surface-tint": "#c0c1ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-xl": "64px",
+                      "container-max": "1280px",
+                      "gutter": "24px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "margin-desktop": "48px",
+                      "margin-mobile": "16px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "label-md": ["Geist", "Inter", "sans-serif"],
+                      "headline-xl": ["Inter", "sans-serif"],
+                      "body-md": ["Inter", "sans-serif"],
+                      "body-lg": ["Inter", "sans-serif"],
+                      "body-sm": ["Inter", "sans-serif"],
+                      "headline-lg": ["Inter", "sans-serif"],
+                      "headline-md": ["Inter", "sans-serif"],
+                      "headline-lg-mobile": ["Inter", "sans-serif"],
+                      "code": ["jetbrainsMono", "monospace"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                      "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400" }],
+                      "body-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+                      "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                      "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "600" }],
+                      "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                      "code": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex selection:bg-primary/30 selection:text-primary">
+<!-- JSON Component: SideNavBar -->
+<nav class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant bg-surface-container-low dark:bg-surface-container-low flex flex-col py-stack-md z-50">
+<!-- Brand -->
+<div class="px-gutter mb-stack-lg flex items-center gap-stack-sm">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[0_0_15px_rgba(192,193,255,0.2)]">
+<span class="material-symbols-outlined text-on-primary text-[20px]">auto_awesome</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">PromptLab</h1>
+<p class="font-label-md text-[10px] text-on-surface-variant tracking-wider uppercase">AI Engine v2.0</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-1 px-stack-sm overflow-y-auto">
+<!-- Inactive -->
+<a class="flex items-center gap-stack-md px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">auto_fix_high</span>
+<span class="font-label-md text-label-md">Optimize Prompt</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">analytics</span>
+<span class="font-label-md text-label-md">Analyze Prompt</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">auto_awesome_motion</span>
+<span class="font-label-md text-label-md">Templates</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<!-- ACTIVE TAB: Saved Prompts -->
+<a class="flex items-center gap-stack-md px-stack-sm py-2 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-variant/50 transition-colors duration-150 opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+<span class="font-label-md text-label-md">Saved Prompts</span>
+</a>
+<div class="my-stack-sm border-t border-outline-variant/30 mx-stack-sm"></div>
+<a class="flex items-center gap-stack-md px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">account_circle</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</div>
+<!-- CTA -->
+<div class="px-gutter mt-auto pt-stack-md">
+<button class="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-primary-container to-secondary-container text-on-primary-container font-label-md text-label-md font-bold hover:opacity-90 transition-opacity border border-primary/20 shadow-[0_0_20px_rgba(128,131,255,0.15)] relative overflow-hidden group">
+<span class="relative z-10">Upgrade to Pro</span>
+<div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+</button>
+</div>
+</nav>
+<!-- Main Canvas Area -->
+<div class="ml-64 flex-1 flex flex-col min-h-screen relative w-[calc(100%-16rem)]">
+<!-- JSON Component: TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] border-b border-outline-variant/30 bg-surface/70 dark:bg-surface/70 backdrop-blur-xl flex justify-between items-center h-16 px-gutter z-40">
+<!-- Contextual Header Text -->
+<div class="flex items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Library / </span>
+<span class="font-label-md text-label-md text-primary ml-1">Saved Prompts</span>
+</div>
+<div class="flex items-center gap-stack-md">
+<!-- Search Icon (JSON says search_bar: on_left, adapting to top nav right side for layout balance if needed, but sticking to minimalist approach) -->
+<!-- Trailing Icon Actions -->
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<!-- Profile Image -->
+<div class="w-8 h-8 rounded-full ml-stack-sm border border-outline-variant overflow-hidden cursor-pointer hover:border-primary transition-colors">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A futuristic, hyper-detailed digital avatar of an AI professional in a sleek cyberpunk style. The portrait features neon blue and purple rim lighting against a deep dark background, emphasizing a smart, technical aesthetic with high resolution and crisp details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdaWrjS_PQbfZkVzm4__ShHzCa5_BL190TSKYl_TCKR3TIeOp-lYDMb2IfeM_7QLIPi_0CgD5tzR3cVGyzBZZdAGGj_2kHlYrAk33OcWW9Lkf_MeJGZvcKlY_BlTIFPC4rBKLb8erGP7aeNfB04SNFhWrk9-zXTx7q6xDMdGClcjSj8zFVgdxptY9936ft_iKxrsh8PF10j1wKnX36l25VPfMi-tvkUR0xXRGXnprHArHYWj2XB_vvxw">
+</div>
+</div>
+</header>
+<!-- Main Content (Canvas) -->
+<main class="flex-1 pt-24 px-margin-desktop pb-stack-xl max-w-container-max mx-auto w-full">
+<!-- Page Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-stack-md mb-stack-lg"><div><h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">Saved Prompts</h2><p class="font-body-md text-body-md text-on-surface-variant">Your personal library of optimized and frequently used AI instructions.</p></div><div class="flex flex-wrap items-center gap-stack-sm"><div class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none w-64 transition-shadow shadow-[0_0_15px_rgba(192,193,255,0.1)]" placeholder="Search prompts..." type="text"></div><div class="relative group"><button class="flex items-center gap-2 bg-surface-container border border-outline-variant px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface hover:border-primary transition-colors"><span>Newest First</span><span class="material-symbols-outlined text-[18px]">expand_more</span></button></div><button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-primary/90 transition-colors shadow-[0_0_15px_rgba(192,193,255,0.2)]"><span class="material-symbols-outlined text-[18px]">add</span>Create New</button></div></div>
+<!-- Categories / Folders (Pills) -->
+<div class="flex flex-wrap gap-stack-sm mb-stack-lg"><button class="px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-label-md text-label-md transition-colors">All Prompts <span class="ml-1 opacity-70 text-[12px]">24</span></button><button class="px-4 py-1.5 rounded-full bg-surface-container border border-outline-variant text-on-surface-variant hover:border-outline hover:text-on-surface font-label-md text-label-md transition-colors">Coding <span class="ml-1 opacity-50 text-[12px]">12</span></button><button class="px-4 py-1.5 rounded-full bg-surface-container border border-outline-variant text-on-surface-variant hover:border-outline hover:text-on-surface font-label-md text-label-md transition-colors">Marketing <span class="ml-1 opacity-50 text-[12px]">8</span></button><button class="px-4 py-1.5 rounded-full bg-surface-container border border-outline-variant text-on-surface-variant hover:border-outline hover:text-on-surface font-label-md text-label-md transition-colors">Education <span class="ml-1 opacity-50 text-[12px]">2</span></button><button class="px-4 py-1.5 rounded-full bg-surface-container border border-outline-variant text-on-surface-variant hover:border-outline hover:text-on-surface font-label-md text-label-md transition-colors">Creative <span class="ml-1 opacity-50 text-[12px]">4</span></button></div>
+<!-- Bento Grid / Card Layout for Prompts -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter"><div class="group relative bg-[#1A1A1A]/70 backdrop-blur-[16px] border border-[#1F1F1F] rounded-xl p-stack-md flex flex-col h-80 hover:border-primary/50 transition-all duration-300 overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.2)] ai-shimmer-hover"><div class="flex justify-between items-start mb-stack-sm relative z-10"><div class="flex gap-2 items-center"><span class="bg-primary/10 text-primary font-code text-[10px] px-2 py-0.5 rounded-sm uppercase tracking-wider border border-primary/20">Coding</span><div class="flex items-center gap-1 text-green-500 font-bold text-[12px]"><span class="material-symbols-outlined text-[14px]">verified</span>98/100</div></div><button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bookmark</span></button></div><h3 class="font-headline-md text-[20px] text-on-surface mb-2 relative z-10 group-hover:text-primary transition-colors">React Component Generator</h3><p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3 mb-4 relative z-10">Act as an expert React developer. Create a functional component that accepts props for title, description, and an array of items...</p><div class="flex flex-wrap gap-1 mb-auto relative z-10"><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#react</span><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#tailwind</span><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#glassmorphism</span></div><div class="flex items-center justify-between mt-stack-md pt-stack-sm border-t border-outline-variant/30 relative z-10"><span class="font-code text-[11px] text-on-surface-variant/60">Saved 2d ago</span><div class="flex gap-1"><button class="w-8 h-8 rounded bg-primary/10 text-primary hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center" title="Reuse in Optimizer"><span class="material-symbols-outlined text-[18px]">auto_fix_high</span></button><button class="w-8 h-8 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" title="Copy"><span class="material-symbols-outlined text-[18px]">content_copy</span></button><button class="w-8 h-8 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" title="Edit"><span class="material-symbols-outlined text-[18px]">edit</span></button><button class="w-8 h-8 rounded hover:bg-error/10 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors" title="Delete"><span class="material-symbols-outlined text-[18px]">delete</span></button></div></div><div class="absolute inset-0 bg-surface-container-lowest/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"><button class="w-32 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg">Open Details</button><button class="w-32 py-2 bg-surface-variant text-on-surface rounded-lg font-label-md text-label-md">Quick Copy</button></div></div><div class="group relative bg-[#1A1A1A]/70 backdrop-blur-[16px] border border-[#1F1F1F] rounded-xl p-stack-md flex flex-col h-80 hover:border-primary/50 transition-all duration-300 overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.2)] ai-shimmer-hover"><div class="flex justify-between items-start mb-stack-sm relative z-10"><div class="flex gap-2 items-center"><span class="bg-secondary/10 text-secondary font-code text-[10px] px-2 py-0.5 rounded-sm uppercase tracking-wider border border-secondary/20">Marketing</span><div class="flex items-center gap-1 text-green-500 font-bold text-[12px]"><span class="material-symbols-outlined text-[14px]">verified</span>94/100</div></div><button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bookmark</span></button></div><h3 class="font-headline-md text-[20px] text-on-surface mb-2 relative z-10 group-hover:text-primary transition-colors">SaaS Launch Tweet Thread</h3><p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3 mb-4 relative z-10">Write a highly engaging 5-part Twitter thread announcing a new AI-powered design tool. The tone should be visionary but practical...</p><div class="flex flex-wrap gap-1 mb-auto relative z-10"><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#twitter</span><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#saas</span><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#copywriting</span></div><div class="flex items-center justify-between mt-stack-md pt-stack-sm border-t border-outline-variant/30 relative z-10"><span class="font-code text-[11px] text-on-surface-variant/60">Saved 5d ago</span><div class="flex gap-1"><button class="w-8 h-8 rounded bg-primary/10 text-primary hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">auto_fix_high</span></button><button class="w-8 h-8 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">content_copy</span></button><button class="w-8 h-8 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button><button class="w-8 h-8 rounded hover:bg-error/10 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button></div></div><div class="absolute inset-0 bg-surface-container-lowest/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"><button class="w-32 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg">Open Details</button><button class="w-32 py-2 bg-surface-variant text-on-surface rounded-lg font-label-md text-label-md">Quick Copy</button></div></div><div class="group relative bg-[#1A1A1A]/70 backdrop-blur-[16px] border border-[#1F1F1F] rounded-xl p-stack-md flex flex-col h-80 hover:border-primary/50 transition-all duration-300 overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.2)] ai-shimmer-hover"><div class="flex justify-between items-start mb-stack-sm relative z-10"><div class="flex gap-2 items-center"><span class="bg-tertiary-fixed-dim/10 text-tertiary-fixed-dim font-code text-[10px] px-2 py-0.5 rounded-sm uppercase tracking-wider border border-tertiary-fixed-dim/20">Creative</span><div class="flex items-center gap-1 text-green-500 font-bold text-[12px]"><span class="material-symbols-outlined text-[14px]">verified</span>91/100</div></div><button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bookmark</span></button></div><h3 class="font-headline-md text-[20px] text-on-surface mb-2 relative z-10 group-hover:text-primary transition-colors">Midjourney Sci-Fi Concept</h3><p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3 mb-4 relative z-10">A cinematic, ultra-detailed wide shot of a futuristic mega-city at dusk. Neon lights reflecting off wet dark streets...</p><div class="flex flex-wrap gap-1 mb-auto relative z-10"><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#midjourney</span><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#cyberpunk</span><span class="text-[10px] px-2 py-0.5 bg-surface-variant/50 text-on-surface-variant rounded">#8k</span></div><div class="flex items-center justify-between mt-stack-md pt-stack-sm border-t border-outline-variant/30 relative z-10"><span class="font-code text-[11px] text-on-surface-variant/60">Saved 1w ago</span><div class="flex gap-1"><button class="w-8 h-8 rounded bg-primary/10 text-primary hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">auto_fix_high</span></button><button class="w-8 h-8 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">content_copy</span></button><button class="w-8 h-8 rounded hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button><button class="w-8 h-8 rounded hover:bg-error/10 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[18px]">delete</span></button></div></div><div class="absolute inset-0 bg-surface-container-lowest/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"><button class="w-32 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg">Open Details</button><button class="w-32 py-2 bg-surface-variant text-on-surface rounded-lg font-label-md text-label-md">Quick Copy</button></div></div></div>
+</main>
+<!-- JSON Component: Footer -->
+<footer class="w-full py-stack-lg border-t border-outline-variant bg-surface-container-lowest mt-auto">
+<div class="max-w-container-max mx-auto px-margin-desktop flex justify-between items-center transition-opacity">
+<div class="font-label-md text-label-md font-bold text-on-surface">
+                    PromptLab
+                </div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+                    © 2024 PromptLab AI. Professional Prompt Engineering Workspace.
+                </div>
+<div class="flex gap-stack-md">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline transition-colors" href="#">Documentation</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline transition-colors" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary underline transition-colors flex items-center gap-1" href="#">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> API Status
+                    </a>
+</div>
+</div>
+</footer>
+</div>
+<div class="fixed inset-y-0 right-0 w-[500px] bg-surface-container-low border-l border-outline-variant z-[60] transition-transform duration-300 shadow-2xl flex flex-col" id="prompt-details-panel"><div class="p-gutter border-b border-outline-variant flex justify-between items-center"><h2 class="font-headline-md text-headline-md text-on-surface">Prompt Details</h2><button class="w-10 h-10 rounded-full hover:bg-surface-variant flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined">close</span></button></div><div class="flex-1 overflow-y-auto p-gutter space-y-stack-lg"><div><label class="font-label-md text-label-md text-primary uppercase tracking-wider mb-2 block">Original Prompt</label><div class="p-4 bg-surface-container-lowest rounded-lg border border-outline-variant/30 font-body-sm text-body-sm text-on-surface-variant italic">"Create a react component with props for title and description."</div></div><div><label class="font-label-md text-label-md text-primary uppercase tracking-wider mb-2 block">Optimized Version</label><div class="p-4 bg-surface-container rounded-lg border border-primary/20 font-code text-code text-on-surface">Act as an expert React developer. Create a functional component that accepts props for title, description, and an array of items. Use Tailwind CSS for styling...</div></div><div><label class="font-label-md text-label-md text-primary uppercase tracking-wider mb-2 block">Why This Is Better</label><ul class="space-y-2"><li class="flex gap-2 text-body-sm text-on-surface-variant"><span class="material-symbols-outlined text-green-500 text-[18px]">check_circle</span><span>Added persona context for better code quality.</span></li><li class="flex gap-2 text-body-sm text-on-surface-variant"><span class="material-symbols-outlined text-green-500 text-[18px]">check_circle</span><span>Specified styling framework (Tailwind) for consistency.</span></li><li class="flex gap-2 text-body-sm text-on-surface-variant"><span class="material-symbols-outlined text-green-500 text-[18px]">check_circle</span><span>Included edge-case handling instructions.</span></li></ul></div><div><label class="font-label-md text-label-md text-primary uppercase tracking-wider mb-2 block">Key Changes</label><div class="space-y-2"><div class="flex items-center gap-2 text-body-sm text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span><span>Structural formatting for readability</span></div><div class="flex items-center gap-2 text-body-sm text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span><span>Explicit output constraints added</span></div></div></div><div class="pt-stack-md border-t border-outline-variant/30"><label class="font-label-md text-label-md text-on-surface mb-2 block">Category &amp; Tags</label><div class="flex flex-wrap gap-2"><span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-[12px] border border-primary/20">Coding</span><span class="px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full text-[12px]">#react</span><button class="w-8 h-8 rounded-full border border-dashed border-outline-variant flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary"><span class="material-symbols-outlined text-[18px]">add</span></button><span class="px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full text-[12px]">GPT-4</span></div></div></div><div class="p-gutter border-t border-outline-variant bg-surface-container flex gap-stack-sm"><button class="flex-1 py-3 bg-primary text-on-primary rounded-lg font-label-md font-bold hover:bg-primary/90">Reuse in Optimizer</button><button class="px-4 py-3 bg-surface-variant text-on-surface rounded-lg font-label-md"><span class="material-symbols-outlined">content_copy</span></button></div></div></body></html>

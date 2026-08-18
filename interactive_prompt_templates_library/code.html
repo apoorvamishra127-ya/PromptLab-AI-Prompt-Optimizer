@@ -1,0 +1,530 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PromptLab - Template Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface-variant": "#c7c4d7",
+                      "error-container": "#93000a",
+                      "on-error": "#690005",
+                      "tertiary-fixed": "#e5e2e1",
+                      "on-primary-fixed": "#07006c",
+                      "on-primary-container": "#0d0096",
+                      "on-surface": "#d3e4fe",
+                      "primary": "#c0c1ff",
+                      "on-primary": "#1000a9",
+                      "secondary": "#d0bcff",
+                      "secondary-container": "#571bc1",
+                      "outline": "#908fa0",
+                      "surface-variant": "#26364a",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "surface-container-highest": "#26364a",
+                      "on-secondary-fixed": "#23005c",
+                      "on-tertiary-container": "#2a2a29",
+                      "on-secondary": "#3c0091",
+                      "tertiary-fixed-dim": "#c9c6c5",
+                      "surface-container-high": "#1b2b3f",
+                      "on-secondary-fixed-variant": "#5516be",
+                      "inverse-primary": "#494bd6",
+                      "surface-dim": "#031427",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-background": "#d3e4fe",
+                      "background": "#031427",
+                      "surface-container-lowest": "#000f21",
+                      "surface-tint": "#c0c1ff",
+                      "tertiary": "#c9c6c5",
+                      "primary-fixed": "#e1e0ff",
+                      "error": "#ffb4ab",
+                      "primary-container": "#8083ff",
+                      "secondary-fixed-dim": "#d0bcff",
+                      "surface-bright": "#2a3a4f",
+                      "surface-container-low": "#0b1c30",
+                      "on-tertiary": "#313030",
+                      "on-error-container": "#ffdad6",
+                      "secondary-fixed": "#e9ddff",
+                      "on-secondary-container": "#c4abff",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "surface": "#031427",
+                      "inverse-on-surface": "#213145",
+                      "inverse-surface": "#d3e4fe",
+                      "outline-variant": "#464554",
+                      "surface-container": "#102034",
+                      "tertiary-container": "#929090",
+                      "on-primary-fixed-variant": "#2f2ebe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "container-max": "1280px",
+                      "stack-xl": "64px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "margin-desktop": "48px",
+                      "stack-lg": "32px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "code": [
+                              "jetbrainsMono"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "code": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(3, 20, 39, 0.5); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(192, 193, 255, 0.2); 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(192, 193, 255, 0.4); 
+        }
+        
+        /* Shimmer effect for AI generating state */
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .glass-card {
+            background: rgba(27, 43, 63, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            border-left: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #c0c1ff, #571bc1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md overflow-x-hidden">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex flex-col h-screen w-64 sticky docked left-0 bg-surface-container-low/80 dark:bg-surface-container-low/80 backdrop-blur-xl border-r border-white/10 shadow-2xl p-4 gap-2 z-30">
+<!-- Header -->
+<div class="flex items-center gap-3 mb-6 px-2">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-sm font-bold" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary">PromptLab</h1>
+<p class="font-label-md text-label-md text-on-surface-variant text-[10px]">AI Workspace</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all font-label-md text-label-md hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all font-label-md text-label-md hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="auto_fix_high">auto_fix_high</span>
+                Optimize Prompt
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all font-label-md text-label-md hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Analyze Prompt
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-secondary-container text-on-secondary-container font-bold font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="sticky_note_2">sticky_note_2</span>
+                Templates
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all font-label-md text-label-md hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                History
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all font-label-md text-label-md hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+                Saved Prompts
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all font-label-md text-label-md hover:translate-x-1 mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-all font-label-md text-label-md hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+                Profile
+            </a>
+</nav>
+<!-- CTA -->
+<button class="mt-4 w-full py-2.5 rounded-lg bg-surface-container-high border border-outline-variant text-primary font-label-md text-label-md hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="workspace_premium">workspace_premium</span>
+            Upgrade to Pro
+        </button>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-h-screen relative overflow-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="flex justify-between items-center px-gutter py-4 w-full bg-surface/70 dark:bg-surface/70 backdrop-blur-md border-b border-white/10 shadow-sm docked full-width top-0 sticky z-40">
+<!-- Mobile Brand/Menu Toggle -->
+<div class="flex items-center gap-4 md:hidden">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary">PromptLab</span>
+</div>
+<!-- Empty div for desktop alignment since search is in page content for this specific view -->
+<div class="hidden md:block"></div>
+<!-- Right Actions -->
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-white/5 transition-colors scale-95 active:scale-90 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-white/5 transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-secondary-container text-white rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity scale-95 active:scale-90">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                    Create New
+                </button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 ml-2 cursor-pointer">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A highly detailed close-up portrait of a young professional in a futuristic dark mode setting. The lighting is soft and moody with a subtle blue rim light. Minimalist, premium SaaS aesthetic. 8k resolution, photorealistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5UwSxmfG0YD93AQk7KXfJeTAvDT_67w7pJwEwriO3akM6CET9ejNahAyKQMrSL3B9q0Zd6sNYYgQbGopQih189_eHdg1LbXBy6CmHgaxDPzVWSl4C_Om7-es3a7Txg0n4na5BQ48hNArmyhkxzOg1PBilWe-oqh61xKki2tSEinpy46qGYOqgHlG1j0KKah2tlhe35idi31eUKnH3Px2oMFEpnsK4yFMu894-lyk0YZAK-BNPwVAo3A">
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 overflow-y-auto px-margin-mobile md:px-margin-desktop py-8 pb-32">
+<div class="max-w-container-max mx-auto">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-stack-lg">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">Template Library</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                            A curated collection of high-performance prompt frameworks. Explore, customize, and deploy optimized structures for any AI model.
+                        </p>
+</div>
+<button class="flex items-center justify-center gap-2 px-6 py-3 bg-surface-container-high border border-outline-variant hover:border-primary/50 text-on-surface rounded-lg font-label-md text-label-md transition-all hover:bg-surface-variant/80 shrink-0 shadow-lg" onclick="openCreateModal()">
+<span class="material-symbols-outlined" data-icon="edit_square">edit_square</span>
+                        Create Custom Template
+                    </button>
+</div>
+<!-- Search and Filters -->
+<div class="flex flex-col gap-4 mb-stack-lg">
+<!-- Search Bar -->
+<div class="relative w-full max-w-2xl glass-card rounded-xl overflow-hidden focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none text-on-surface pl-12 pr-4 py-4 font-body-md focus:ring-0 placeholder:text-outline" placeholder="Search templates by name, tag, or purpose..." type="text">
+<button class="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-surface-variant rounded-md text-on-surface-variant text-sm hover:text-on-surface transition-colors">
+<span class="font-code text-code text-xs">⌘K</span>
+</button>
+</div>
+<!-- Filter Bar Row -->
+<div class="flex flex-wrap items-center gap-3">
+<!-- Category Pills (Scrollable on mobile) -->
+<div class="flex overflow-x-auto pb-2 -mb-2 gap-2 hide-scrollbar flex-1 min-w-[300px]">
+<button class="px-4 py-1.5 rounded-full bg-primary/15 text-primary border border-primary/30 font-label-md text-label-md whitespace-nowrap">All</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant border border-transparent font-label-md text-label-md whitespace-nowrap transition-colors">Coding</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant border border-transparent font-label-md text-label-md whitespace-nowrap transition-colors">Data Analysis</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant border border-transparent font-label-md text-label-md whitespace-nowrap transition-colors">Marketing</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant border border-transparent font-label-md text-label-md whitespace-nowrap transition-colors">Content Creation</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant border border-transparent font-label-md text-label-md whitespace-nowrap transition-colors">Education</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant border border-transparent font-label-md text-label-md whitespace-nowrap transition-colors">AI/ML</button>
+</div>
+<!-- Dropdown Filters -->
+<div class="flex items-center gap-2 shrink-0">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant text-on-surface-variant hover:text-on-surface text-sm transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span>
+                                Difficulty
+                                <span class="material-symbols-outlined text-[16px]" data-icon="arrow_drop_down">arrow_drop_down</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant text-on-surface-variant hover:text-on-surface text-sm transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="psychology">psychology</span>
+                                Model
+                                <span class="material-symbols-outlined text-[16px]" data-icon="arrow_drop_down">arrow_drop_down</span>
+</button>
+<div class="h-6 w-px bg-outline-variant mx-1"></div>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-transparent text-on-surface-variant hover:text-on-surface text-sm transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="sort">sort</span>
+                                Popular
+                            </button>
+</div>
+</div>
+</div>
+<!-- Template Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="glass-card rounded-xl p-5 flex flex-col group hover:border-primary/40 transition-all duration-300 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#1e293b] text-[#38bdf8] border border-[#38bdf8]/20">CODING</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant border border-outline-variant">ADVANCED</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 relative z-10">Python Code Refactor</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 flex-1 relative z-10 line-clamp-3">
+                            A comprehensive structure instructing the AI to analyze Python code for PEP-8 compliance, optimize time complexity, and add standardized docstrings while maintaining original functionality.
+                        </p>
+<div class="flex items-center gap-3 mb-6 relative z-10">
+<div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]" data-icon="psychology">psychology</span>
+                                GPT-4
+                            </div>
+<div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+<div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]" data-icon="monitoring">monitoring</span>
+                                12.4k uses
+                            </div>
+</div>
+<div class="flex gap-2 relative z-10">
+<button class="flex-1 bg-gradient-to-r from-primary to-secondary-container text-white py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity" onclick="useTemplate()">
+                                Use Template
+                            </button>
+<button class="px-3 py-2 bg-surface-container-high border border-outline-variant rounded-lg text-on-surface hover:bg-surface-variant transition-colors" onclick="openPreview()">
+<span class="material-symbols-outlined text-[18px] leading-none" data-icon="visibility">visibility</span>
+</button>
+<div class="relative">
+<button class="px-2 py-2 bg-transparent text-on-surface-variant hover:text-on-surface rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[18px] leading-none" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-card rounded-xl p-5 flex flex-col group hover:border-primary/40 transition-all duration-300 relative overflow-hidden">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#422006] text-[#fdba74] border border-[#fdba74]/20">MARKETING</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant border border-outline-variant">BEGINNER</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 relative z-10">SEO Blog Outline</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 flex-1 relative z-10 line-clamp-3">
+                            Generates a highly structured, SEO-optimized blog outline including H2/H3 tags, primary/secondary keyword integration spots, and a proposed internal linking strategy based on a single topic.
+                        </p>
+<div class="flex items-center gap-3 mb-6 relative z-10">
+<div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]" data-icon="psychology">psychology</span>
+                                Claude 3
+                            </div>
+<div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+<div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]" data-icon="monitoring">monitoring</span>
+                                8.2k uses
+                            </div>
+</div>
+<div class="flex gap-2 relative z-10">
+<button class="flex-1 bg-surface-container-high border border-outline-variant text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-variant hover:text-primary transition-colors">
+                                Use Template
+                            </button>
+<button class="px-3 py-2 bg-surface-container-high border border-outline-variant rounded-lg text-on-surface hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px] leading-none" data-icon="visibility">visibility</span>
+</button>
+<button class="px-2 py-2 bg-transparent text-on-surface-variant hover:text-on-surface rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[18px] leading-none" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-card rounded-xl p-5 flex flex-col group hover:border-primary/40 transition-all duration-300 relative overflow-hidden">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#064e3b] text-[#6ee7b7] border border-[#6ee7b7]/20">DATA</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant border border-outline-variant">INTERMEDIATE</span>
+</div>
+<button class="text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="bookmark" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+</button>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 relative z-10">Financial Risk Analyzer</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 flex-1 relative z-10 line-clamp-3">
+                            Instructs the model to act as a senior financial analyst. It processes provided financial statements, identifies key risk factors, calculates vital ratios, and formats output in a strict markdown table.
+                        </p>
+<div class="flex items-center gap-3 mb-6 relative z-10">
+<div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]" data-icon="psychology">psychology</span>
+                                Gemini Pro
+                            </div>
+<div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+<div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]" data-icon="monitoring">monitoring</span>
+                                3.1k uses
+                            </div>
+</div>
+<div class="flex gap-2 relative z-10">
+<button class="flex-1 bg-surface-container-high border border-outline-variant text-on-surface py-2 rounded-lg font-label-md text-label-md hover:bg-surface-variant hover:text-primary transition-colors">
+                                Use Template
+                            </button>
+<button class="px-3 py-2 bg-surface-container-high border border-outline-variant rounded-lg text-on-surface hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px] leading-none" data-icon="visibility">visibility</span>
+</button>
+<button class="px-2 py-2 bg-transparent text-on-surface-variant hover:text-on-surface rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[18px] leading-none" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Side Panel Preview (Hidden by default) -->
+<div class="fixed inset-y-0 right-0 w-full md:w-[600px] bg-surface-container-lowest border-l border-white/10 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col" id="previewPanel">
+<!-- Panel Header -->
+<div class="flex items-center justify-between p-6 border-b border-white/5">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#1e293b] text-[#38bdf8] border border-[#38bdf8]/20">CODING</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Python Code Refactor</h2>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-2 rounded-full hover:bg-white/5" onclick="closePreview()">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Panel Content Scrollable -->
+<div class="flex-1 overflow-y-auto p-6 space-y-8">
+<!-- Purpose -->
+<section>
+<h4 class="text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-wider">Purpose</h4>
+<p class="font-body-md text-body-md text-on-surface">
+                    This template provides a rigorous framework for an AI to review, refactor, and document Python code. It enforces industry standards and prevents the AI from halluciation by constraining its output format.
+                </p>
+</section>
+<!-- Structure -->
+<section>
+<h4 class="text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-wider">Template Structure</h4>
+<div class="bg-surface-dim rounded-lg p-4 font-code text-code text-on-surface-variant border border-white/5 whitespace-pre-wrap">
+Act as a senior Python developer reviewing code.
+
+<span class="text-primary font-bold">[CONTEXT]</span>
+I am working on a <span class="text-secondary">[PROJECT_TYPE]</span> application and need this specific module refactored.
+
+<span class="text-primary font-bold">[CODE_SNIPPET]</span></div></section></div></div></body></html>
