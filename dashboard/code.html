@@ -133,37 +133,37 @@
 <div class="flex-1 overflow-y-auto px-4">
 <ul class="space-y-1">
 <li>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-variant/50 font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors opacity-80 duration-150" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-variant/50 font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors opacity-80 duration-150" href="code.html">
 <span class="material-symbols-outlined">dashboard</span>
                         Overview
                     </a>
 </li>
 <li>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="../interactive_prompt_optimizer/code.html">
 <span class="material-symbols-outlined">auto_fix_high</span>
                         Optimize Prompt
                     </a>
 </li>
 <li>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="../interactive_prompt_analyzer/code.html">
 <span class="material-symbols-outlined">analytics</span>
                         Analyze Prompt
                     </a>
 </li>
 <li>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="../interactive_templates_library/code.html">
 <span class="material-symbols-outlined">auto_awesome_motion</span>
                         Templates
                     </a>
 </li>
 <li>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="../interactive_history_saved_prompts/code.html""">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="../interactive_history_saved_prompts/code.html">
 <span class="material-symbols-outlined">history</span>
                         History
                     </a>
 </li>
 <li>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="../interactive_saved_prompts_library/code.html">
 <span class="material-symbols-outlined">bookmark</span>
                         Saved Prompts
                     </a>
@@ -171,7 +171,7 @@
 </ul>
 </div>
 <div class="px-4 mt-auto space-y-1">
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant hover:text-on-surface transition-colors" href="../settings/code.html">
 <span class="material-symbols-outlined">settings</span>
                 Settings
             </a>
@@ -222,7 +222,7 @@
 <div class="relative z-10 w-full max-w-lg">
 <h3 class="font-headline-md text-headline-md font-semibold text-on-surface mb-4">Ready to improve your next prompt?</h3>
 <p class="font-body-md text-body-md text-on-surface-variant mb-6">Our advanced AI engine analyzes and optimizes your instructions for maximum output precision across all major language models.</p>
-<button class="px-6 py-3 rounded-lg btn-primary font-label-md text-label-md text-white font-semibold flex items-center gap-2 w-max hover:opacity-90 transition-opacity">
+<button id="optimizeCta" type="button" class="px-6 py-3 rounded-lg btn-primary font-label-md text-label-md text-white font-semibold flex items-center gap-2 w-max hover:opacity-90 transition-opacity">
 <span class="material-symbols-outlined">auto_fix_high</span>
                             Optimize Prompt
                         </button>
@@ -234,28 +234,28 @@
 <span class="material-symbols-outlined text-primary-container mb-2">trending_up</span>
 <div>
 <p class="font-label-md text-label-md text-on-surface-variant">Optimized</p>
-<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">1,248</p>
+<p id="optimizedCount" class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">0</p>
 </div>
 </div>
 <div class="glass-card rounded-xl p-5 flex flex-col justify-between">
 <span class="material-symbols-outlined text-primary-container mb-2">speed</span>
 <div>
 <p class="font-label-md text-label-md text-on-surface-variant">Avg Score</p>
-<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">94<span class="text-body-sm font-normal text-on-surface-variant">/100</span></p>
+<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1"><span id="avgScore">0</span><span class="text-body-sm font-normal text-on-surface-variant">/100</span></p>
 </div>
 </div>
 <div class="glass-card rounded-xl p-5 flex flex-col justify-between">
 <span class="material-symbols-outlined text-primary-container mb-2">bookmark</span>
 <div>
 <p class="font-label-md text-label-md text-on-surface-variant">Saved</p>
-<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">342</p>
+<p id="savedCount" class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">0</p>
 </div>
 </div>
 <div class="glass-card rounded-xl p-5 flex flex-col justify-between">
 <span class="material-symbols-outlined text-primary-container mb-2">auto_awesome_motion</span>
 <div>
 <p class="font-label-md text-label-md text-on-surface-variant">Templates</p>
-<p class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">86</p>
+<p id="templateCount" class="font-headline-lg text-headline-lg font-bold text-on-surface mt-1">0</p>
 </div>
 </div>
 </div>
@@ -282,57 +282,151 @@
 <div class="col-span-1 md:col-span-4 glass-card rounded-xl p-6 flex flex-col">
 <div class="flex justify-between items-center mb-6">
 <h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Recent Prompts</h3>
-<a class="text-primary font-label-md text-label-md hover:underline" href="#">View All</a>
+<a class="text-primary font-label-md text-label-md hover:underline" href="../interactive_history_saved_prompts/code.html">View All</a>
 </div>
-<div class="space-y-4 flex-1">
-<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-variant/50 transition-colors">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-sm text-on-surface-variant">description</span>
-</div>
+<div id="recentPrompts" class="space-y-4 flex-1">
+<div class="flex items-center justify-center h-full min-h-40 text-center">
 <div>
-<p class="font-body-sm text-body-sm text-on-surface font-medium truncate w-32">Data Analysis Script</p>
-<p class="font-label-md text-[11px] text-on-surface-variant">GPT-4 Turbo</p>
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">history</span>
+<p class="font-body-sm text-body-sm text-on-surface mt-2">No prompts yet</p>
+<p class="font-label-md text-[11px] text-on-surface-variant mt-1">Your optimized prompts will appear here.</p>
 </div>
 </div>
-<div class="text-right">
-<span class="font-label-md text-label-md text-emerald-400">92/100</span>
-<p class="font-label-md text-[11px] text-on-surface-variant">2h ago</p>
-</div>
-</div>
-<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-variant/50 transition-colors">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-sm text-on-surface-variant">code</span>
-</div>
-<div>
-<p class="font-body-sm text-body-sm text-on-surface font-medium truncate w-32">React Component Refactor</p>
-<p class="font-label-md text-[11px] text-on-surface-variant">Claude 3 Opus</p>
-</div>
-</div>
-<div class="text-right">
-<span class="font-label-md text-label-md text-emerald-400">88/100</span>
-<p class="font-label-md text-[11px] text-on-surface-variant">5h ago</p>
-</div>
-</div>
-<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-variant/50 transition-colors">
-<div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center">
-<span class="material-symbols-outlined text-sm text-on-surface-variant">draw</span>
-</div>
-<div>
-<p class="font-body-sm text-body-sm text-on-surface font-medium truncate w-32">Marketing Copy Gen</p>
-<p class="font-label-md text-[11px] text-on-surface-variant">Gemini 1.5 Pro</p>
-</div>
-</div>
-<div class="text-right">
-<span class="font-label-md text-label-md text-amber-400">76/100</span>
-<p class="font-label-md text-[11px] text-on-surface-variant">1d ago</p>
-</div>
-</div>
-</div>
+</div></div>
 </div>
 </div>
 </main>
 </div>
+
+<script>
+(function () {
+  const KEYS = {
+    history: "promptlab_history",
+    saved: "promptlab_saved_prompts",
+    templates: "promptlab_templates"
+  };
+
+  function read(key, fallback = []) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return Array.isArray(value) ? value : fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  function write(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+    }[ch]));
+  }
+
+  function renderDashboard() {
+    const history = read(KEYS.history);
+    const saved = read(KEYS.saved);
+    const templates = read(KEYS.templates);
+
+    const scores = history.map(x => Number(x.score)).filter(Number.isFinite);
+    const avg = scores.length
+      ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+      : 0;
+
+    document.getElementById("optimizedCount").textContent = history.length;
+    document.getElementById("savedCount").textContent = saved.length;
+    document.getElementById("templateCount").textContent = templates.length;
+    document.getElementById("avgScore").textContent = avg;
+
+    const container = document.getElementById("recentPrompts");
+    if (!history.length) {
+      container.innerHTML = `
+        <div class="flex items-center justify-center h-full min-h-40 text-center">
+          <div>
+            <span class="material-symbols-outlined text-4xl text-on-surface-variant">history</span>
+            <p class="font-body-sm text-body-sm text-on-surface mt-2">No prompts yet</p>
+            <p class="font-label-md text-[11px] text-on-surface-variant mt-1">Your optimized prompts will appear here.</p>
+          </div>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = history.slice(-3).reverse().map(item => {
+      const title = item.title || item.name || (item.prompt || "Untitled prompt").slice(0, 28);
+      const score = Number.isFinite(Number(item.score)) ? `${item.score}/100` : "—";
+      const model = item.model || "PromptLab";
+      const time = item.createdAt ? new Date(item.createdAt).toLocaleString() : "";
+      return `
+        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-variant/50 transition-colors">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-sm text-on-surface-variant">description</span>
+            </div>
+            <div class="min-w-0">
+              <p class="font-body-sm text-body-sm text-on-surface font-medium truncate w-40">${escapeHtml(title)}</p>
+              <p class="font-label-md text-[11px] text-on-surface-variant">${escapeHtml(model)}</p>
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="font-label-md text-label-md text-emerald-400">${escapeHtml(score)}</span>
+            <p class="font-label-md text-[11px] text-on-surface-variant">${escapeHtml(time)}</p>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  // Main CTA.
+  document.getElementById("optimizeCta")?.addEventListener("click", () => {
+    window.location.href = "../interactive_prompt_optimizer/code.html";
+  });
+
+  // Upgrade button: don't leave a dead click.
+  document.querySelector("button.btn-primary:not(#optimizeCta)")?.addEventListener("click", () => {
+    alert("Pro upgrade is not connected yet. We will wire payments after the core prompt flow is working.");
+  });
+
+  // Header notification/help buttons.
+  const topButtons = document.querySelectorAll("header button");
+  if (topButtons[0]) topButtons[0].addEventListener("click", () => {
+    alert("No new notifications.");
+  });
+  if (topButtons[1]) topButtons[1].addEventListener("click", () => {
+    alert("PromptLab Help: use Optimize Prompt to create an optimized prompt, then save it to keep it in your library.");
+  });
+
+  // Search: filter recent prompts and allow direct navigation.
+  const search = document.querySelector('input[placeholder="Search prompts, templates..."]');
+  if (search) {
+    search.addEventListener("input", () => {
+      const q = search.value.trim().toLowerCase();
+      document.querySelectorAll("#recentPrompts > div").forEach(card => {
+        card.style.display = !q || card.textContent.toLowerCase().includes(q) ? "" : "none";
+      });
+    });
+    search.addEventListener("keydown", e => {
+      if (e.key !== "Enter") return;
+      const q = search.value.toLowerCase();
+      if (q.includes("history") || q.includes("recent")) {
+        window.location.href = "../interactive_history_saved_prompts/code.html";
+      } else if (q.includes("analy")) {
+        window.location.href = "../interactive_prompt_analyzer/code.html";
+      } else if (q.includes("optim")) {
+        window.location.href = "../interactive_prompt_optimizer/code.html";
+      } else if (q.includes("template")) {
+        window.location.href = "../interactive_templates_library/code.html";
+      } else if (q.includes("saved")) {
+        window.location.href = "../interactive_saved_prompts_library/code.html";
+      } else if (q.includes("setting")) {
+        window.location.href = "../settings/code.html";
+      }
+    });
+  }
+
+  renderDashboard();
+  window.addEventListener("storage", renderDashboard);
+})();
+</script>
+
 </body></html>
