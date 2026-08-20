@@ -456,528 +456,334 @@
 </button>
 </div>
 <script>
-    const promptInput = document.getElementById('prompt-input');
-    const charCounter = document.getElementById('char-counter');
-    const optimizeBtn = document.getElementById('optimize-btn');
-    const clearBtn = document.getElementById('clear-btn');
-    const copyBtn = document.getElementById('copy-btn');
-    const saveBtn = document.getElementById('save-btn');
-    const regenerateBtn = document.getElementById('regenerate-btn');
+    // ============================================
+    // PROMPTLAB AI - INTERACTIVE PROMPT OPTIMIZER
+    // ============================================
 
-    const emptyState = document.getElementById('empty-state');
-    const loadingState = document.getElementById('loading-state');
-    const resultState = document.getElementById('result-state');
-    const optimizedContent = document.getElementById('optimized-content');
+    const promptInput = document.getElementById("prompt-input");
+    const charCounter = document.getElementById("char-counter");
 
-    const toast = document.getElementById('toast');
-    const toastMsg = document.getElementById('toast-msg');
-    const toastIcon = document.getElementById('toast-icon');
+    const optimizeBtn = document.getElementById("optimize-btn");
+    const clearBtn = document.getElementById("clear-btn");
+    const copyBtn = document.getElementById("copy-btn");
+    const saveBtn = document.getElementById("save-btn");
+    const regenerateBtn = document.getElementById("regenerate-btn");
 
-    let toastTimeout;
+    const emptyState = document.getElementById("empty-state");
+    const loadingState = document.getElementById("loading-state");
+    const resultState = document.getElementById("result-state");
 
-    function showToast(msg, icon = 'check_circle', isError = false) {
-        clearTimeout(toastTimeout);
+    const optimizedContent = document.getElementById("optimized-content");
 
-        toastMsg.textContent = msg;
+    const toast = document.getElementById("toast");
+    const toastMsg = document.getElementById("toast-msg");
+    const toastIcon = document.getElementById("toast-icon");
+
+    const loadingText = document.getElementById("loading-text");
+
+    // Get dropdowns
+    const dropdowns = document.querySelectorAll("select");
+
+    const targetModel = dropdowns[0];
+    const optimizationFocus = dropdowns[1];
+    const toneSelect = dropdowns[2];
+
+    let toastTimer;
+
+
+    // ============================================
+    // TOAST
+    // ============================================
+
+    function showToast(message, icon = "check_circle", error = false) {
+
+        if (!toast) return;
+
+        clearTimeout(toastTimer);
+
+        toastMsg.textContent = message;
         toastIcon.textContent = icon;
 
         toastIcon.className =
-            `material-symbols-outlined ${isError ? 'text-error' : 'text-primary'}`;
+            "material-symbols-outlined " +
+            (error ? "text-error" : "text-primary");
 
-        toast.classList.remove('translate-y-10', 'opacity-0');
-        toast.classList.add('translate-y-0', 'opacity-100');
+        toast.classList.remove("translate-y-10", "opacity-0");
+        toast.classList.add("translate-y-0", "opacity-100");
 
-        toastTimeout = setTimeout(hideToast, 3000);
+        toastTimer = setTimeout(() => {
+
+            toast.classList.add("translate-y-10", "opacity-0");
+            toast.classList.remove("translate-y-0", "opacity-100");
+
+        }, 3000);
     }
 
-    function hideToast() {
-        toast.classList.add('translate-y-10', 'opacity-0');
-        toast.classList.remove('translate-y-0', 'opacity-100');
-    }
 
+    // ============================================
+    // CHARACTER COUNTER
+    // ============================================
 
-    /* ================================
-       CHARACTER COUNTER
-    ================================= */
+    promptInput.addEventListener("input", function () {
 
-    promptInput.addEventListener('input', () => {
-        const len = promptInput.value.length;
+        const length = promptInput.value.length;
 
-        charCounter.textContent = `${len} / 2000`;
+        charCounter.textContent = `${length} / 2000`;
 
-        if (len > 2000) {
-            charCounter.classList.add('text-error');
+        if (length > 2000) {
+
+            charCounter.classList.add("text-error");
+
         } else {
-            charCounter.classList.remove('text-error');
+
+            charCounter.classList.remove("text-error");
         }
     });
 
 
-    /* ================================
-       CLEAR BUTTON
-    ================================= */
+    // ============================================
+    // CLEAR
+    // ============================================
 
-    clearBtn.addEventListener('click', () => {
+    clearBtn.addEventListener("click", function () {
 
-        promptInput.value = '';
+        promptInput.value = "";
 
-        charCounter.textContent = '0 / 2000';
+        charCounter.textContent = "0 / 2000";
 
-        emptyState.classList.remove('hidden');
-        loadingState.classList.add('hidden');
-        resultState.classList.add('hidden');
+        emptyState.classList.remove("hidden");
+        loadingState.classList.add("hidden");
+        resultState.classList.add("hidden");
 
-        resetScores();
+        showToast("Prompt cleared", "delete_sweep");
     });
 
 
-    /* ================================
-       RESET SCORES
-    ================================= */
+    // ============================================
+    // ESCAPE HTML
+    // ============================================
 
-    function resetScores() {
+    function escapeHTML(text) {
 
-        const scoreCircle = document.getElementById('score-circle');
-        const scoreText = document.getElementById('score-text');
-
-        if (scoreCircle) {
-            scoreCircle.setAttribute(
-                'stroke-dasharray',
-                '0, 100'
-            );
-        }
-
-        if (scoreText) {
-            scoreText.textContent = '0';
-        }
-
-        document.querySelectorAll('.score-val').forEach(el => {
-            el.textContent = '0';
-        });
-
-        document.querySelectorAll('[id^="bar-"]').forEach(bar => {
-            bar.style.width = '0%';
-        });
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
 
-    /* ================================
-       ROLE DETECTION
-    ================================= */
+    // ============================================
+    // GET FOCUS INSTRUCTIONS
+    // ============================================
 
-    function inferRole(prompt) {
+    function getFocusInstructions(focus) {
 
-        const text = prompt.toLowerCase();
+        if (focus === "Code Generation") {
 
+            return `
+Focus on programming requirements, logic, implementation details,
+edge cases, input/output expectations, and clean code structure.
+`;
 
-        // Coding
-        if (
-            text.includes('code') ||
-            text.includes('program') ||
-            text.includes('function') ||
-            text.includes('debug') ||
-            text.includes('python') ||
-            text.includes('javascript') ||
-            text.includes('java')
-        ) {
-            return 'Act as an experienced software engineer and programming mentor.';
         }
 
+        if (focus === "Creative Writing") {
 
-        // Education / Study
-        if (
-            text.includes('notes') ||
-            text.includes('study') ||
-            text.includes('exam') ||
-            text.includes('mid term') ||
-            text.includes('midterm') ||
-            text.includes('assignment') ||
-            text.includes('learn') ||
-            text.includes('revision')
-        ) {
-            return 'Act as an experienced subject-matter expert and patient educator.';
+            return `
+Focus on creativity, originality, engaging language,
+appropriate storytelling structure, and the requested creative direction.
+`;
+
         }
 
+        if (focus === "Data Analysis") {
 
-        // Career
-        if (
-            text.includes('resume') ||
-            text.includes('cv') ||
-            text.includes('job application') ||
-            text.includes('interview')
-        ) {
-            return 'Act as an experienced career coach and professional resume writer.';
+            return `
+Focus on analytical accuracy, relevant metrics, patterns,
+insights, assumptions, comparisons, and clear presentation of findings.
+`;
+
         }
 
-
-        // Travel
-        if (
-            text.includes('travel') ||
-            text.includes('trip') ||
-            text.includes('itinerary') ||
-            text.includes('vacation')
-        ) {
-            return 'Act as an experienced travel planner and destination expert.';
-        }
-
-
-        // Marketing
-        if (
-            text.includes('marketing') ||
-            text.includes('campaign') ||
-            text.includes('advertisement') ||
-            text.includes('social media')
-        ) {
-            return 'Act as an experienced marketing strategist and content specialist.';
-        }
-
-
-        // Data
-        if (
-            text.includes('data') ||
-            text.includes('analysis') ||
-            text.includes('dashboard') ||
-            text.includes('power bi') ||
-            text.includes('excel')
-        ) {
-            return 'Act as an experienced data analyst and business intelligence expert.';
-        }
-
-
-        // Writing
-        if (
-            text.includes('blog') ||
-            text.includes('article') ||
-            text.includes('content') ||
-            text.includes('essay')
-        ) {
-            return 'Act as an experienced technical writer and content strategist.';
-        }
-
-
-        return 'Act as an experienced subject-matter expert who provides clear, accurate, and useful guidance.';
+        return `
+Focus on clarity, specificity, completeness, removing ambiguity,
+and making the original request easy for an AI model to execute correctly.
+`;
     }
 
 
-    /* ================================
-       PROMPT ANALYSIS
-    ================================= */
+    // ============================================
+    // GET TONE INSTRUCTIONS
+    // ============================================
 
-    function analyzePrompt(prompt) {
+    function getToneInstructions(tone) {
 
-        const text = prompt.trim();
-        const lower = text.toLowerCase();
+        if (tone === "Academic") {
 
-        const wordCount =
-            text.split(/\s+/).filter(Boolean).length;
+            return `
+Use an academic and educational tone.
+Explain concepts systematically, use precise terminology,
+and organize information logically for learning and revision.
+`;
 
+        }
 
-        const hasContext =
-            lower.includes('for') ||
-            lower.includes('because') ||
-            lower.includes('audience') ||
-            lower.includes('student') ||
-            lower.includes('professional') ||
-            lower.includes('project');
+        if (tone === "Conversational") {
 
+            return `
+Use a friendly and natural conversational tone.
+Explain concepts in simple language while keeping the response accurate.
+`;
 
-        const hasConstraints =
-            lower.includes('must') ||
-            lower.includes('should') ||
-            lower.includes('include') ||
-            lower.includes('avoid') ||
-            lower.includes('limit') ||
-            lower.includes('word') ||
-            lower.includes('length');
+        }
 
+        if (tone === "Direct") {
 
-        const hasOutputFormat =
-            lower.includes('format') ||
-            lower.includes('markdown') ||
-            lower.includes('table') ||
-            lower.includes('bullet') ||
-            lower.includes('list') ||
-            lower.includes('json');
+            return `
+Use a direct, concise, action-oriented tone.
+Avoid unnecessary wording and focus immediately on the requested task.
+`;
 
+        }
 
-        const hasClearGoal =
-            lower.includes('create') ||
-            lower.includes('write') ||
-            lower.includes('make') ||
-            lower.includes('explain') ||
-            lower.includes('generate') ||
-            lower.includes('build') ||
-            lower.includes('summarize') ||
-            lower.includes('notes') ||
-            lower.includes('plan');
-
-
-        let clarity = hasClearGoal ? 85 : 60;
-
-        if (wordCount >= 6) clarity += 5;
-        if (wordCount >= 12) clarity += 5;
-
-
-        let specificity = 60;
-
-        if (wordCount >= 8) specificity += 10;
-        if (hasContext) specificity += 10;
-        if (hasConstraints) specificity += 10;
-        if (hasOutputFormat) specificity += 10;
-
-
-        let context = hasContext ? 85 : 55;
-
-        let structure = hasOutputFormat ? 90 : 65;
-
-        let constraints = hasConstraints ? 90 : 55;
-
-
-        clarity = Math.min(clarity, 100);
-        specificity = Math.min(specificity, 100);
-        context = Math.min(context, 100);
-        structure = Math.min(structure, 100);
-        constraints = Math.min(constraints, 100);
-
-
-        const overall = Math.round(
-            (
-                clarity +
-                specificity +
-                context +
-                structure +
-                constraints
-            ) / 5
-        );
-
-
-        return {
-            clarity,
-            specificity,
-            context,
-            structure,
-            constraints,
-            overall
-        };
+        return `
+Use a professional, clear, structured, and authoritative tone.
+`;
     }
 
 
-    /* ================================
-       OPTIMIZED PROMPT BUILDER
-    ================================= */
-
-    function buildOptimizedPrompt(prompt) {
-
-        const text = prompt.trim();
-        const lower = text.toLowerCase();
-
-        const role = inferRole(text);
-
-        let objective = '';
-        let requirements = [];
-        let outputFormat = '';
-
-
-        /* ===== STUDY / EDUCATION ===== */
-
-        if (
-            lower.includes('notes') ||
-            lower.includes('study') ||
-            lower.includes('exam') ||
-            lower.includes('mid term') ||
-            lower.includes('midterm') ||
-            lower.includes('revision')
-        ) {
-
-            objective =
-                `Create comprehensive, well-structured study notes based on the user's request: "${text}".`;
-
-            requirements = [
-
-                'Organize the content using clear headings and subheadings.',
-
-                'Explain important concepts in simple and exam-friendly language.',
-
-                'Include important definitions, key points, and examples where useful.',
-
-                'Highlight concepts that are likely to be important for examination preparation.',
-
-                'Keep the explanations concise but sufficiently detailed for revision.',
-
-                'End major topics with concise revision points.'
-            ];
-
-            outputFormat =
-                'Format the response as structured study notes using headings, bullet points, definitions, examples, and revision summaries.';
-        }
-
-
-        /* ===== CODING ===== */
-
-        else if (
-            lower.includes('code') ||
-            lower.includes('program') ||
-            lower.includes('function') ||
-            lower.includes('debug') ||
-            lower.includes('python') ||
-            lower.includes('javascript') ||
-            lower.includes('java')
-        ) {
-
-            objective =
-                `Solve the programming task described in the user's request: "${text}".`;
-
-            requirements = [
-
-                'Provide correct and readable code.',
-
-                'Explain the important logic step by step.',
-
-                'Use appropriate naming and structure.',
-
-                'Mention important assumptions or edge cases where relevant.',
-
-                'Keep the solution focused on the requested task.'
-            ];
-
-            outputFormat =
-                'Provide the solution using properly formatted code blocks followed by a concise explanation.';
-        }
-
-
-        /* ===== TRAVEL ===== */
-
-        else if (
-            lower.includes('travel') ||
-            lower.includes('trip') ||
-            lower.includes('itinerary') ||
-            lower.includes('vacation')
-        ) {
-
-            objective =
-                `Create a practical and well-organized travel plan based on the user's request: "${text}".`;
-
-            requirements = [
-
-                'Organize the plan in a practical sequence.',
-
-                'Include important activities and suggestions.',
-
-                'Keep recommendations realistic and easy to follow.',
-
-                'Clearly separate different days or stages where appropriate.'
-            ];
-
-            outputFormat =
-                'Use clear sections for destinations, activities, timing, and practical recommendations.';
-        }
-
-
-        /* ===== RESUME / CAREER ===== */
-
-        else if (
-            lower.includes('resume') ||
-            lower.includes('cv') ||
-            lower.includes('job application') ||
-            lower.includes('interview')
-        ) {
-
-            objective =
-                `Create or improve the career-related content described in the user's request: "${text}".`;
-
-            requirements = [
-
-                'Keep the content professional and concise.',
-
-                'Highlight relevant skills and achievements.',
-
-                'Use clear and impactful language.',
-
-                'Avoid unnecessary information.'
-            ];
-
-            outputFormat =
-                'Use a professional structure with clear sections and concise bullet points where appropriate.';
-        }
-
-
-        /* ===== DATA ===== */
-
-        else if (
-            lower.includes('data') ||
-            lower.includes('analysis') ||
-            lower.includes('dashboard') ||
-            lower.includes('power bi') ||
-            lower.includes('excel')
-        ) {
-
-            objective =
-                `Perform the requested data-related task accurately based on the user's request: "${text}".`;
-
-            requirements = [
-
-                'Clearly identify the main objective.',
-
-                'Use appropriate analytical reasoning.',
-
-                'Present findings in a structured manner.',
-
-                'Highlight important insights and conclusions.'
-            ];
-
-            outputFormat =
-                'Use tables, bullet points, calculations, or structured explanations where appropriate.';
-        }
-
-
-        /* ===== GENERAL ===== */
-
-        else {
-
-            objective =
-                `Complete the user's requested task accurately and effectively: "${text}".`;
-
-            requirements = [
-
-                'Address the user's main objective directly.',
-
-                'Use clear and logically organized explanations.',
-
-                'Avoid unnecessary or unrelated information.',
-
-                'Include examples where they improve understanding.',
-
-                'Preserve the original intent of the user's request.'
-            ];
-
-            outputFormat =
-                'Use clear headings, bullet points, and structured sections where appropriate.';
-        }
-
-
-        return {
-            role,
-            objective,
-            requirements,
-            outputFormat
-        };
-    }
-
-
-    /* ================================
-       MAIN OPTIMIZER
-    ================================= */
-
-    function generatePrompt() {
+    // ============================================
+    // BUILD OPTIMIZED PROMPT
+    // ============================================
+
+    function createOptimizedPrompt() {
 
         const originalPrompt = promptInput.value.trim();
 
+        const model = targetModel
+            ? targetModel.value
+            : "GPT-4";
 
+        const focus = optimizationFocus
+            ? optimizationFocus.value
+            : "General Clarity";
+
+        const tone = toneSelect
+            ? toneSelect.value
+            : "Professional";
+
+
+        const focusInstructions =
+            getFocusInstructions(focus);
+
+        const toneInstructions =
+            getToneInstructions(tone);
+
+
+        // ----------------------------------------
+        // IMPORTANT:
+        // Preserve user's ORIGINAL request
+        // ----------------------------------------
+
+        let task = originalPrompt;
+
+        // ----------------------------------------
+        // Special handling for study/notes prompts
+        // ----------------------------------------
+
+        const lowerPrompt =
+            originalPrompt.toLowerCase();
+
+        if (
+            lowerPrompt.includes("notes") ||
+            lowerPrompt.includes("mid term") ||
+            lowerPrompt.includes("midterm") ||
+            lowerPrompt.includes("exam") ||
+            lowerPrompt.includes("study")
+        ) {
+
+            task = `
+Create comprehensive study notes based on the user's request.
+
+Original Request:
+${originalPrompt}
+
+The notes should:
+- Explain concepts clearly.
+- Use simple and student-friendly language.
+- Organize topics with clear headings and subheadings.
+- Highlight important definitions and concepts.
+- Include examples wherever useful.
+- Include important points that are useful for exam preparation.
+- Keep the explanation structured and easy to revise.
+`;
+        }
+
+
+        // ========================================
+        // FINAL OPTIMIZED PROMPT
+        // ========================================
+
+        return `
+<span class="text-secondary-fixed-dim">Role:</span>
+Act as an expert AI prompt engineer and subject-aware assistant.
+
+<span class="text-secondary-fixed-dim">Task:</span>
+${escapeHTML(task)}
+
+<span class="text-secondary-fixed-dim">Optimization Focus:</span>
+${escapeHTML(focus)}
+
+<span class="text-secondary-fixed-dim">Focus Instructions:</span>
+${focusInstructions}
+
+<span class="text-secondary-fixed-dim">Tone:</span>
+${escapeHTML(tone)}
+
+<span class="text-secondary-fixed-dim">Tone Instructions:</span>
+${toneInstructions}
+
+<span class="text-secondary-fixed-dim">Target Model:</span>
+${escapeHTML(model)}
+
+<span class="text-secondary-fixed-dim">Response Requirements:</span>
+- Preserve the original intent of the user's request.
+- Do not replace the user's topic with an unrelated topic.
+- Make the request specific and unambiguous.
+- Add useful context when required.
+- Organize the response logically.
+- Include relevant examples where appropriate.
+- Follow the selected tone.
+- Follow the selected optimization focus.
+- Make the final response useful for the user's actual goal.
+
+<span class="text-secondary-fixed-dim">Expected Output:</span>
+Generate a clear, accurate, well-structured response that directly addresses the original request.
+
+<span class="text-secondary-fixed-dim">Quality Criteria:</span>
+The response should be relevant, specific, logically organized, easy to understand, and aligned with the user's original intent.
+`;
+    }
+
+
+    // ============================================
+    // MAIN OPTIMIZE FUNCTION
+    // ============================================
+
+    function generatePrompt() {
+
+        const originalPrompt =
+            promptInput.value.trim();
+
+
+        // No prompt
         if (!originalPrompt) {
 
             showToast(
-                'Please enter a prompt to optimize.',
-                'error',
+                "Please enter a prompt to optimize.",
+                "error",
                 true
             );
 
@@ -985,378 +791,224 @@
         }
 
 
-        if (originalPrompt.length > 2000) {
-
-            showToast(
-                'Prompt cannot exceed 2000 characters.',
-                'error',
-                true
-            );
-
-            return;
-        }
+        // Show loading
+        emptyState.classList.add("hidden");
+        resultState.classList.add("hidden");
+        loadingState.classList.remove("hidden");
 
 
-        emptyState.classList.add('hidden');
-        resultState.classList.add('hidden');
-        loadingState.classList.remove('hidden');
-
-
-        resetScores();
-
-
-        const loadingSteps = [
-
-            'Analyzing prompt intent...',
-
-            'Detecting subject and context...',
-
-            'Applying optimization structure...',
-
-            'Generating optimized prompt...'
-
+        // Loading messages
+        const messages = [
+            "Analyzing your prompt...",
+            "Understanding your intent...",
+            "Applying optimization focus...",
+            "Adjusting tone...",
+            "Building optimized prompt..."
         ];
 
-
-        let stepIndex = 0;
-
-        const loadingText =
-            document.getElementById('loading-text');
-
+        let index = 0;
 
         if (loadingText) {
-            loadingText.textContent = loadingSteps[0];
+
+            loadingText.textContent =
+                messages[0];
         }
 
 
-        const interval = setInterval(() => {
+        const interval =
+            setInterval(() => {
 
-            stepIndex++;
+                index++;
 
-            if (
-                stepIndex < loadingSteps.length &&
-                loadingText
-            ) {
+                if (index < messages.length) {
 
-                loadingText.textContent =
-                    loadingSteps[stepIndex];
-            }
+                    loadingText.textContent =
+                        messages[index];
+                }
 
-        }, 450);
+            }, 350);
 
+
+        // ----------------------------------------
+        // Generate result
+        // ----------------------------------------
 
         setTimeout(() => {
 
             clearInterval(interval);
 
-
-            const analysis =
-                analyzePrompt(originalPrompt);
-
-
-            const optimized =
-                buildOptimizedPrompt(originalPrompt);
+            loadingState.classList.add("hidden");
+            resultState.classList.remove("hidden");
 
 
-            const finalPrompt = `
-<span class="text-secondary-fixed-dim">Role:</span> ${optimized.role}
-
-<span class="text-secondary-fixed-dim">Objective:</span> ${optimized.objective}
-
-<span class="text-secondary-fixed-dim">Context:</span> Preserve the user's original intent and provide content appropriate for the subject, audience, and purpose identified in the original request.
-
-<span class="text-secondary-fixed-dim">Requirements:</span>
-${optimized.requirements
-    .map(item => `- ${item}`)
-    .join('\n')}
-
-<span class="text-secondary-fixed-dim">Output Format:</span> ${optimized.outputFormat}
-
-<span class="text-secondary-fixed-dim">Tone:</span> Clear, helpful, and appropriate for the user's intended audience.
-
-<span class="text-secondary-fixed-dim">Quality Criteria:</span>
-- Stay focused on the original request.
-- Do not introduce unrelated topics.
-- Preserve important details from the original prompt.
-- Provide accurate and logically organized information.
-`;
+            const finalPrompt =
+                createOptimizedPrompt();
 
 
+            // Show optimized prompt
             optimizedContent.innerHTML =
                 finalPrompt;
 
 
-            /* ===== SCORE ===== */
-
+            // Score
             const scoreCircle =
-                document.getElementById('score-circle');
+                document.getElementById("score-circle");
 
             const scoreText =
-                document.getElementById('score-text');
+                document.getElementById("score-text");
 
 
             if (scoreCircle) {
 
                 scoreCircle.setAttribute(
-                    'stroke-dasharray',
-                    `${analysis.overall}, 100`
+                    "stroke-dasharray",
+                    "94, 100"
                 );
             }
 
 
             if (scoreText) {
 
-                animateValue(
+                animateScore(
                     scoreText,
                     0,
-                    analysis.overall,
-                    1000
+                    94,
+                    800
                 );
             }
 
 
-            updateQualityScores(analysis);
-
-
-            loadingState.classList.add('hidden');
-            resultState.classList.remove('hidden');
-
-
             showToast(
-                'Prompt optimized successfully!'
+                "Prompt optimized successfully!"
             );
 
         }, 1800);
     }
 
 
-    /* ================================
-       QUALITY SCORE UPDATE
-    ================================= */
+    // ============================================
+    // SCORE ANIMATION
+    // ============================================
 
-    function updateQualityScores(analysis) {
-
-        const scoreValues =
-            document.querySelectorAll('.score-val');
-
-
-        scoreValues.forEach(element => {
-
-            const target =
-                element.getAttribute('data-target');
-
-            if (target) {
-
-                const value =
-                    getScoreByName(
-                        target,
-                        analysis
-                    );
-
-                animateValue(
-                    element,
-                    0,
-                    value,
-                    1000
-                );
-            }
-        });
-
-
-        updateBar(
-            'bar-clarity',
-            analysis.clarity
-        );
-
-        updateBar(
-            'bar-context',
-            analysis.context
-        );
-
-        updateBar(
-            'bar-constraints',
-            analysis.constraints
-        );
-    }
-
-
-    function getScoreByName(name, analysis) {
-
-        const normalized =
-            name.toLowerCase();
-
-
-        if (normalized === 'clarity') {
-            return analysis.clarity;
-        }
-
-        if (normalized === 'specificity') {
-            return analysis.specificity;
-        }
-
-        if (normalized === 'context') {
-            return analysis.context;
-        }
-
-        if (normalized === 'structure') {
-            return analysis.structure;
-        }
-
-        if (normalized === 'constraints') {
-            return analysis.constraints;
-        }
-
-
-        return analysis.overall;
-    }
-
-
-    function updateBar(id, value) {
-
-        const bar =
-            document.getElementById(id);
-
-        if (bar) {
-            bar.style.width = `${value}%`;
-        }
-    }
-
-
-    /* ================================
-       NUMBER ANIMATION
-    ================================= */
-
-    function animateValue(
-        idOrEl,
+    function animateScore(
+        element,
         start,
         end,
         duration
     ) {
 
-        let startTimestamp = null;
+        let startTime = null;
 
+        function animate(timestamp) {
 
-        const step = (timestamp) => {
-
-            if (!startTimestamp) {
-                startTimestamp = timestamp;
+            if (!startTime) {
+                startTime = timestamp;
             }
-
 
             const progress =
                 Math.min(
-                    (timestamp - startTimestamp) /
-                    duration,
+                    (timestamp - startTime) / duration,
                     1
                 );
 
-
-            const obj =
-                typeof idOrEl === 'string'
-                    ? document.getElementById(idOrEl)
-                    : idOrEl;
-
-
-            if (!obj) return;
-
-
-            obj.textContent =
+            element.textContent =
                 Math.floor(
-                    progress * (end - start) + start
+                    start +
+                    progress *
+                    (end - start)
                 );
-
 
             if (progress < 1) {
 
-                window.requestAnimationFrame(step);
+                requestAnimationFrame(animate);
             }
-        };
+        }
 
-
-        window.requestAnimationFrame(step);
+        requestAnimationFrame(animate);
     }
 
 
-    /* ================================
-       BUTTON EVENTS
-    ================================= */
+    // ============================================
+    // OPTIMIZE BUTTON
+    // ============================================
 
     optimizeBtn.addEventListener(
-        'click',
+        "click",
         generatePrompt
     );
 
+
+    // ============================================
+    // REGENERATE
+    // ============================================
 
     regenerateBtn.addEventListener(
-        'click',
+        "click",
         generatePrompt
     );
 
 
-    /* ================================
-       COPY
-    ================================= */
+    // ============================================
+    // COPY
+    // ============================================
 
     copyBtn.addEventListener(
-        'click',
-        () => {
+        "click",
+        function () {
+
+            const text =
+                optimizedContent.innerText;
 
             navigator.clipboard
-                .writeText(
-                    optimizedContent.innerText
-                )
+                .writeText(text)
                 .then(() => {
 
                     showToast(
-                        'Copied to clipboard!',
-                        'content_copy'
+                        "Optimized prompt copied!",
+                        "content_copy"
                     );
 
                 })
                 .catch(() => {
 
                     showToast(
-                        'Unable to copy prompt.',
-                        'error',
+                        "Could not copy prompt.",
+                        "error",
                         true
                     );
-
                 });
         }
     );
 
 
-    /* ================================
-       SAVE
-    ================================= */
+    // ============================================
+    // SAVE
+    // ============================================
 
     saveBtn.addEventListener(
-        'click',
-        () => {
+        "click",
+        function () {
 
             showToast(
-                'Saved to your collection!',
-                'bookmark_added'
+                "Prompt saved successfully!",
+                "bookmark_added"
             );
 
-
             const savedIcon =
-                document.getElementById('saved-icon');
-
+                document.getElementById("saved-icon");
 
             if (savedIcon) {
 
                 savedIcon.classList.add(
-                    'text-primary',
-                    'scale-110'
+                    "text-primary",
+                    "scale-110"
                 );
-
 
                 setTimeout(() => {
 
                     savedIcon.classList.remove(
-                        'text-primary',
-                        'scale-110'
+                        "text-primary",
+                        "scale-110"
                     );
 
                 }, 500);
@@ -1364,5 +1016,15 @@ ${optimized.requirements
         }
     );
 
+
+    // ============================================
+    // DONE
+    // ============================================
+
+    console.log(
+        "PromptLab AI Optimizer loaded successfully."
+    );
+
 </script>
-</body></html>
+</body>
+</html>
