@@ -658,115 +658,211 @@ Use a professional, clear, structured, and authoritative tone.
     // BUILD OPTIMIZED PROMPT
     // ============================================
 
-    function createOptimizedPrompt() {
+   function createOptimizedPrompt() {
 
-        const originalPrompt = promptInput.value.trim();
+    const originalPrompt = promptInput.value.trim();
 
-        const model = targetModel
-            ? targetModel.value
-            : "GPT-4";
+    const model = targetModel
+        ? targetModel.value
+        : "GPT-4";
 
-        const focus = optimizationFocus
-            ? optimizationFocus.value
-            : "General Clarity";
+    const focus = optimizationFocus
+        ? optimizationFocus.value
+        : "General Clarity";
 
-        const tone = toneSelect
-            ? toneSelect.value
-            : "Professional";
-
-
-        const focusInstructions =
-            getFocusInstructions(focus);
-
-        const toneInstructions =
-            getToneInstructions(tone);
+    const tone = toneSelect
+        ? toneSelect.value
+        : "Professional";
 
 
-        // ----------------------------------------
-        // IMPORTANT:
-        // Preserve user's ORIGINAL request
-        // ----------------------------------------
-
-        let task = originalPrompt;
-
-        // ----------------------------------------
-        // Special handling for study/notes prompts
-        // ----------------------------------------
-
-        const lowerPrompt =
-            originalPrompt.toLowerCase();
-
-        if (
-            lowerPrompt.includes("notes") ||
-            lowerPrompt.includes("mid term") ||
-            lowerPrompt.includes("midterm") ||
-            lowerPrompt.includes("exam") ||
-            lowerPrompt.includes("study")
-        ) {
-
-            task = `
-Create comprehensive study notes based on the user's request.
-
-Original Request:
-${originalPrompt}
-
-The notes should:
-- Explain concepts clearly.
-- Use simple and student-friendly language.
-- Organize topics with clear headings and subheadings.
-- Highlight important definitions and concepts.
-- Include examples wherever useful.
-- Include important points that are useful for exam preparation.
-- Keep the explanation structured and easy to revise.
-`;
-        }
+    const lowerPrompt = originalPrompt.toLowerCase();
 
 
-        // ========================================
-        // FINAL OPTIMIZED PROMPT
-        // ========================================
+    // ==========================================
+    // DETECT USER'S ACTUAL TOPIC
+    // ==========================================
+
+    let detectedSubject = "the requested topic";
+    let subjectRole = "an expert subject-matter instructor";
+
+    if (
+        lowerPrompt.includes("operating system") ||
+        lowerPrompt.includes("operating systems") ||
+        lowerPrompt.includes(" os ") ||
+        lowerPrompt.startsWith("os ") ||
+        lowerPrompt.includes(" os notes")
+    ) {
+        detectedSubject = "Operating Systems (OS)";
+        subjectRole = "an expert Operating Systems instructor";
+    }
+
+
+    // ==========================================
+    // DETECT STUDY / NOTES REQUEST
+    // ==========================================
+
+    const isStudyRequest =
+        lowerPrompt.includes("notes") ||
+        lowerPrompt.includes("mid term") ||
+        lowerPrompt.includes("midterm") ||
+        lowerPrompt.includes("exam") ||
+        lowerPrompt.includes("study") ||
+        lowerPrompt.includes("revision");
+
+
+    // ==========================================
+    // FOCUS
+    // ==========================================
+
+    let focusInstruction = "";
+
+    if (focus === "Code Generation") {
+
+        focusInstruction =
+            "Focus on implementation details, logic, algorithms, code structure, edge cases, and practical examples.";
+
+    } else if (focus === "Creative Writing") {
+
+        focusInstruction =
+            "Focus on creativity, originality, engaging presentation, and appropriate structure.";
+
+    } else if (focus === "Data Analysis") {
+
+        focusInstruction =
+            "Focus on analytical accuracy, relevant metrics, comparisons, patterns, and meaningful insights.";
+
+    } else {
+
+        focusInstruction =
+            "Focus on clarity, specificity, completeness, logical organization, and removing ambiguity.";
+    }
+
+
+    // ==========================================
+    // TONE
+    // ==========================================
+
+    let toneInstruction = "";
+
+    if (tone === "Academic") {
+
+        toneInstruction =
+            "Use an academic and educational tone with precise terminology and logically organized explanations.";
+
+    } else if (tone === "Conversational") {
+
+        toneInstruction =
+            "Use a friendly, natural, student-friendly conversational tone while maintaining accuracy.";
+
+    } else if (tone === "Direct") {
+
+        toneInstruction =
+            "Use a direct, concise, and action-oriented tone without unnecessary explanations.";
+
+    } else {
+
+        toneInstruction =
+            "Use a professional, clear, structured, and authoritative tone.";
+    }
+
+
+    // ==========================================
+    // STUDY / NOTES PROMPT
+    // ==========================================
+
+    if (isStudyRequest) {
 
         return `
 <span class="text-secondary-fixed-dim">Role:</span>
-Act as an expert AI prompt engineer and subject-aware assistant.
+Act as ${subjectRole}.
 
 <span class="text-secondary-fixed-dim">Task:</span>
-${escapeHTML(task)}
+Create comprehensive study notes for ${detectedSubject} based on the user's original request.
+
+<span class="text-secondary-fixed-dim">Original Request:</span>
+${escapeHTML(originalPrompt)}
+
+<span class="text-secondary-fixed-dim">Purpose:</span>
+The notes are intended for mid-term examination preparation and revision.
+
+<span class="text-secondary-fixed-dim">Requirements:</span>
+- Cover the important concepts relevant to the requested subject.
+- Explain concepts clearly using simple, student-friendly language.
+- Include clear and accurate definitions.
+- Organize the content using headings and subheadings.
+- Explain important concepts step by step where necessary.
+- Include suitable examples wherever useful.
+- Highlight important exam-oriented points.
+- Include comparisons or differences in table format where appropriate.
+- Keep the notes structured and easy to revise.
+- Do not replace the user's requested subject with an unrelated topic.
+- Preserve the original intent of the request.
 
 <span class="text-secondary-fixed-dim">Optimization Focus:</span>
 ${escapeHTML(focus)}
 
 <span class="text-secondary-fixed-dim">Focus Instructions:</span>
-${focusInstructions}
+${focusInstruction}
 
 <span class="text-secondary-fixed-dim">Tone:</span>
 ${escapeHTML(tone)}
 
 <span class="text-secondary-fixed-dim">Tone Instructions:</span>
-${toneInstructions}
+${toneInstruction}
 
 <span class="text-secondary-fixed-dim">Target Model:</span>
 ${escapeHTML(model)}
 
-<span class="text-secondary-fixed-dim">Response Requirements:</span>
-- Preserve the original intent of the user's request.
-- Do not replace the user's topic with an unrelated topic.
-- Make the request specific and unambiguous.
-- Add useful context when required.
-- Organize the response logically.
-- Include relevant examples where appropriate.
-- Follow the selected tone.
-- Follow the selected optimization focus.
-- Make the final response useful for the user's actual goal.
-
-<span class="text-secondary-fixed-dim">Expected Output:</span>
-Generate a clear, accurate, well-structured response that directly addresses the original request.
+<span class="text-secondary-fixed-dim">Output Format:</span>
+Use clear headings, subheadings, bullet points, definitions, examples, and comparison tables where appropriate.
 
 <span class="text-secondary-fixed-dim">Quality Criteria:</span>
-The response should be relevant, specific, logically organized, easy to understand, and aligned with the user's original intent.
+The optimized prompt should be specific, relevant to ${detectedSubject}, exam-oriented, logically structured, easy to understand, and faithful to the user's original request.
 `;
     }
 
+
+    // ==========================================
+    // GENERAL REQUEST
+    // ==========================================
+
+    return `
+<span class="text-secondary-fixed-dim">Role:</span>
+Act as an expert AI assistant specialized in ${detectedSubject}.
+
+<span class="text-secondary-fixed-dim">Task:</span>
+${escapeHTML(originalPrompt)}
+
+<span class="text-secondary-fixed-dim">Optimization Focus:</span>
+${escapeHTML(focus)}
+
+<span class="text-secondary-fixed-dim">Focus Instructions:</span>
+${focusInstruction}
+
+<span class="text-secondary-fixed-dim">Tone:</span>
+${escapeHTML(tone)}
+
+<span class="text-secondary-fixed-dim">Tone Instructions:</span>
+${toneInstruction}
+
+<span class="text-secondary-fixed-dim">Target Model:</span>
+${escapeHTML(model)}
+
+<span class="text-secondary-fixed-dim">Requirements:</span>
+- Preserve the original intent.
+- Make the request specific and unambiguous.
+- Add useful context where necessary.
+- Organize the response logically.
+- Follow the selected tone and optimization focus.
+- Do not introduce unrelated topics.
+
+<span class="text-secondary-fixed-dim">Expected Output:</span>
+Generate a clear, accurate, well-structured response that directly addresses the user's original request.
+
+<span class="text-secondary-fixed-dim">Quality Criteria:</span>
+The result should be relevant, specific, coherent, actionable, and aligned with the original request.
+`;
+}
 
     // ============================================
     // MAIN OPTIMIZE FUNCTION
