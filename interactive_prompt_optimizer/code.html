@@ -456,143 +456,913 @@
 </button>
 </div>
 <script>
-        const promptInput = document.getElementById('prompt-input');
-        const charCounter = document.getElementById('char-counter');
-        const optimizeBtn = document.getElementById('optimize-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        const copyBtn = document.getElementById('copy-btn');
-        const saveBtn = document.getElementById('save-btn');
-        const regenerateBtn = document.getElementById('regenerate-btn');
-        
-        const emptyState = document.getElementById('empty-state');
-        const loadingState = document.getElementById('loading-state');
-        const resultState = document.getElementById('result-state');
-        const optimizedContent = document.getElementById('optimized-content');
-        
-        const toast = document.getElementById('toast');
-        const toastMsg = document.getElementById('toast-msg');
-        const toastIcon = document.getElementById('toast-icon');
+    const promptInput = document.getElementById('prompt-input');
+    const charCounter = document.getElementById('char-counter');
+    const optimizeBtn = document.getElementById('optimize-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const regenerateBtn = document.getElementById('regenerate-btn');
 
-        let toastTimeout;
+    const emptyState = document.getElementById('empty-state');
+    const loadingState = document.getElementById('loading-state');
+    const resultState = document.getElementById('result-state');
+    const optimizedContent = document.getElementById('optimized-content');
 
-        function showToast(msg, icon = 'check_circle', isError = false) {
-            clearTimeout(toastTimeout);
-            toastMsg.textContent = msg;
-            toastIcon.textContent = icon;
-            toastIcon.className = `material-symbols-outlined ${isError ? 'text-error' : 'text-primary'}`;
-            toast.classList.remove('translate-y-10', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-            
-            toastTimeout = setTimeout(hideToast, 3000);
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-msg');
+    const toastIcon = document.getElementById('toast-icon');
+
+    let toastTimeout;
+
+    function showToast(msg, icon = 'check_circle', isError = false) {
+        clearTimeout(toastTimeout);
+
+        toastMsg.textContent = msg;
+        toastIcon.textContent = icon;
+
+        toastIcon.className =
+            `material-symbols-outlined ${isError ? 'text-error' : 'text-primary'}`;
+
+        toast.classList.remove('translate-y-10', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+
+        toastTimeout = setTimeout(hideToast, 3000);
+    }
+
+    function hideToast() {
+        toast.classList.add('translate-y-10', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+    }
+
+
+    /* ================================
+       CHARACTER COUNTER
+    ================================= */
+
+    promptInput.addEventListener('input', () => {
+        const len = promptInput.value.length;
+
+        charCounter.textContent = `${len} / 2000`;
+
+        if (len > 2000) {
+            charCounter.classList.add('text-error');
+        } else {
+            charCounter.classList.remove('text-error');
+        }
+    });
+
+
+    /* ================================
+       CLEAR BUTTON
+    ================================= */
+
+    clearBtn.addEventListener('click', () => {
+
+        promptInput.value = '';
+
+        charCounter.textContent = '0 / 2000';
+
+        emptyState.classList.remove('hidden');
+        loadingState.classList.add('hidden');
+        resultState.classList.add('hidden');
+
+        resetScores();
+    });
+
+
+    /* ================================
+       RESET SCORES
+    ================================= */
+
+    function resetScores() {
+
+        const scoreCircle = document.getElementById('score-circle');
+        const scoreText = document.getElementById('score-text');
+
+        if (scoreCircle) {
+            scoreCircle.setAttribute(
+                'stroke-dasharray',
+                '0, 100'
+            );
         }
 
-        function hideToast() {
-            toast.classList.add('translate-y-10', 'opacity-0');
-            toast.classList.remove('translate-y-0', 'opacity-100');
+        if (scoreText) {
+            scoreText.textContent = '0';
         }
 
-        promptInput.addEventListener('input', () => {
-            const len = promptInput.value.length;
-            charCounter.textContent = `${len} / 2000`;
-            if (len > 2000) {
-                charCounter.classList.add('text-error');
-            } else {
-                charCounter.classList.remove('text-error');
-            }
+        document.querySelectorAll('.score-val').forEach(el => {
+            el.textContent = '0';
         });
 
-        clearBtn.addEventListener('click', () => {
-            promptInput.value = '';
-            charCounter.textContent = '0 / 2000';
-            emptyState.classList.remove('hidden');
+        document.querySelectorAll('[id^="bar-"]').forEach(bar => {
+            bar.style.width = '0%';
+        });
+    }
+
+
+    /* ================================
+       ROLE DETECTION
+    ================================= */
+
+    function inferRole(prompt) {
+
+        const text = prompt.toLowerCase();
+
+
+        // Coding
+        if (
+            text.includes('code') ||
+            text.includes('program') ||
+            text.includes('function') ||
+            text.includes('debug') ||
+            text.includes('python') ||
+            text.includes('javascript') ||
+            text.includes('java')
+        ) {
+            return 'Act as an experienced software engineer and programming mentor.';
+        }
+
+
+        // Education / Study
+        if (
+            text.includes('notes') ||
+            text.includes('study') ||
+            text.includes('exam') ||
+            text.includes('mid term') ||
+            text.includes('midterm') ||
+            text.includes('assignment') ||
+            text.includes('learn') ||
+            text.includes('revision')
+        ) {
+            return 'Act as an experienced subject-matter expert and patient educator.';
+        }
+
+
+        // Career
+        if (
+            text.includes('resume') ||
+            text.includes('cv') ||
+            text.includes('job application') ||
+            text.includes('interview')
+        ) {
+            return 'Act as an experienced career coach and professional resume writer.';
+        }
+
+
+        // Travel
+        if (
+            text.includes('travel') ||
+            text.includes('trip') ||
+            text.includes('itinerary') ||
+            text.includes('vacation')
+        ) {
+            return 'Act as an experienced travel planner and destination expert.';
+        }
+
+
+        // Marketing
+        if (
+            text.includes('marketing') ||
+            text.includes('campaign') ||
+            text.includes('advertisement') ||
+            text.includes('social media')
+        ) {
+            return 'Act as an experienced marketing strategist and content specialist.';
+        }
+
+
+        // Data
+        if (
+            text.includes('data') ||
+            text.includes('analysis') ||
+            text.includes('dashboard') ||
+            text.includes('power bi') ||
+            text.includes('excel')
+        ) {
+            return 'Act as an experienced data analyst and business intelligence expert.';
+        }
+
+
+        // Writing
+        if (
+            text.includes('blog') ||
+            text.includes('article') ||
+            text.includes('content') ||
+            text.includes('essay')
+        ) {
+            return 'Act as an experienced technical writer and content strategist.';
+        }
+
+
+        return 'Act as an experienced subject-matter expert who provides clear, accurate, and useful guidance.';
+    }
+
+
+    /* ================================
+       PROMPT ANALYSIS
+    ================================= */
+
+    function analyzePrompt(prompt) {
+
+        const text = prompt.trim();
+        const lower = text.toLowerCase();
+
+        const wordCount =
+            text.split(/\s+/).filter(Boolean).length;
+
+
+        const hasContext =
+            lower.includes('for') ||
+            lower.includes('because') ||
+            lower.includes('audience') ||
+            lower.includes('student') ||
+            lower.includes('professional') ||
+            lower.includes('project');
+
+
+        const hasConstraints =
+            lower.includes('must') ||
+            lower.includes('should') ||
+            lower.includes('include') ||
+            lower.includes('avoid') ||
+            lower.includes('limit') ||
+            lower.includes('word') ||
+            lower.includes('length');
+
+
+        const hasOutputFormat =
+            lower.includes('format') ||
+            lower.includes('markdown') ||
+            lower.includes('table') ||
+            lower.includes('bullet') ||
+            lower.includes('list') ||
+            lower.includes('json');
+
+
+        const hasClearGoal =
+            lower.includes('create') ||
+            lower.includes('write') ||
+            lower.includes('make') ||
+            lower.includes('explain') ||
+            lower.includes('generate') ||
+            lower.includes('build') ||
+            lower.includes('summarize') ||
+            lower.includes('notes') ||
+            lower.includes('plan');
+
+
+        let clarity = hasClearGoal ? 85 : 60;
+
+        if (wordCount >= 6) clarity += 5;
+        if (wordCount >= 12) clarity += 5;
+
+
+        let specificity = 60;
+
+        if (wordCount >= 8) specificity += 10;
+        if (hasContext) specificity += 10;
+        if (hasConstraints) specificity += 10;
+        if (hasOutputFormat) specificity += 10;
+
+
+        let context = hasContext ? 85 : 55;
+
+        let structure = hasOutputFormat ? 90 : 65;
+
+        let constraints = hasConstraints ? 90 : 55;
+
+
+        clarity = Math.min(clarity, 100);
+        specificity = Math.min(specificity, 100);
+        context = Math.min(context, 100);
+        structure = Math.min(structure, 100);
+        constraints = Math.min(constraints, 100);
+
+
+        const overall = Math.round(
+            (
+                clarity +
+                specificity +
+                context +
+                structure +
+                constraints
+            ) / 5
+        );
+
+
+        return {
+            clarity,
+            specificity,
+            context,
+            structure,
+            constraints,
+            overall
+        };
+    }
+
+
+    /* ================================
+       OPTIMIZED PROMPT BUILDER
+    ================================= */
+
+    function buildOptimizedPrompt(prompt) {
+
+        const text = prompt.trim();
+        const lower = text.toLowerCase();
+
+        const role = inferRole(text);
+
+        let objective = '';
+        let requirements = [];
+        let outputFormat = '';
+
+
+        /* ===== STUDY / EDUCATION ===== */
+
+        if (
+            lower.includes('notes') ||
+            lower.includes('study') ||
+            lower.includes('exam') ||
+            lower.includes('mid term') ||
+            lower.includes('midterm') ||
+            lower.includes('revision')
+        ) {
+
+            objective =
+                `Create comprehensive, well-structured study notes based on the user's request: "${text}".`;
+
+            requirements = [
+
+                'Organize the content using clear headings and subheadings.',
+
+                'Explain important concepts in simple and exam-friendly language.',
+
+                'Include important definitions, key points, and examples where useful.',
+
+                'Highlight concepts that are likely to be important for examination preparation.',
+
+                'Keep the explanations concise but sufficiently detailed for revision.',
+
+                'End major topics with concise revision points.'
+            ];
+
+            outputFormat =
+                'Format the response as structured study notes using headings, bullet points, definitions, examples, and revision summaries.';
+        }
+
+
+        /* ===== CODING ===== */
+
+        else if (
+            lower.includes('code') ||
+            lower.includes('program') ||
+            lower.includes('function') ||
+            lower.includes('debug') ||
+            lower.includes('python') ||
+            lower.includes('javascript') ||
+            lower.includes('java')
+        ) {
+
+            objective =
+                `Solve the programming task described in the user's request: "${text}".`;
+
+            requirements = [
+
+                'Provide correct and readable code.',
+
+                'Explain the important logic step by step.',
+
+                'Use appropriate naming and structure.',
+
+                'Mention important assumptions or edge cases where relevant.',
+
+                'Keep the solution focused on the requested task.'
+            ];
+
+            outputFormat =
+                'Provide the solution using properly formatted code blocks followed by a concise explanation.';
+        }
+
+
+        /* ===== TRAVEL ===== */
+
+        else if (
+            lower.includes('travel') ||
+            lower.includes('trip') ||
+            lower.includes('itinerary') ||
+            lower.includes('vacation')
+        ) {
+
+            objective =
+                `Create a practical and well-organized travel plan based on the user's request: "${text}".`;
+
+            requirements = [
+
+                'Organize the plan in a practical sequence.',
+
+                'Include important activities and suggestions.',
+
+                'Keep recommendations realistic and easy to follow.',
+
+                'Clearly separate different days or stages where appropriate.'
+            ];
+
+            outputFormat =
+                'Use clear sections for destinations, activities, timing, and practical recommendations.';
+        }
+
+
+        /* ===== RESUME / CAREER ===== */
+
+        else if (
+            lower.includes('resume') ||
+            lower.includes('cv') ||
+            lower.includes('job application') ||
+            lower.includes('interview')
+        ) {
+
+            objective =
+                `Create or improve the career-related content described in the user's request: "${text}".`;
+
+            requirements = [
+
+                'Keep the content professional and concise.',
+
+                'Highlight relevant skills and achievements.',
+
+                'Use clear and impactful language.',
+
+                'Avoid unnecessary information.'
+            ];
+
+            outputFormat =
+                'Use a professional structure with clear sections and concise bullet points where appropriate.';
+        }
+
+
+        /* ===== DATA ===== */
+
+        else if (
+            lower.includes('data') ||
+            lower.includes('analysis') ||
+            lower.includes('dashboard') ||
+            lower.includes('power bi') ||
+            lower.includes('excel')
+        ) {
+
+            objective =
+                `Perform the requested data-related task accurately based on the user's request: "${text}".`;
+
+            requirements = [
+
+                'Clearly identify the main objective.',
+
+                'Use appropriate analytical reasoning.',
+
+                'Present findings in a structured manner.',
+
+                'Highlight important insights and conclusions.'
+            ];
+
+            outputFormat =
+                'Use tables, bullet points, calculations, or structured explanations where appropriate.';
+        }
+
+
+        /* ===== GENERAL ===== */
+
+        else {
+
+            objective =
+                `Complete the user's requested task accurately and effectively: "${text}".`;
+
+            requirements = [
+
+                'Address the user's main objective directly.',
+
+                'Use clear and logically organized explanations.',
+
+                'Avoid unnecessary or unrelated information.',
+
+                'Include examples where they improve understanding.',
+
+                'Preserve the original intent of the user's request.'
+            ];
+
+            outputFormat =
+                'Use clear headings, bullet points, and structured sections where appropriate.';
+        }
+
+
+        return {
+            role,
+            objective,
+            requirements,
+            outputFormat
+        };
+    }
+
+
+    /* ================================
+       MAIN OPTIMIZER
+    ================================= */
+
+    function generatePrompt() {
+
+        const originalPrompt = promptInput.value.trim();
+
+
+        if (!originalPrompt) {
+
+            showToast(
+                'Please enter a prompt to optimize.',
+                'error',
+                true
+            );
+
+            return;
+        }
+
+
+        if (originalPrompt.length > 2000) {
+
+            showToast(
+                'Prompt cannot exceed 2000 characters.',
+                'error',
+                true
+            );
+
+            return;
+        }
+
+
+        emptyState.classList.add('hidden');
+        resultState.classList.add('hidden');
+        loadingState.classList.remove('hidden');
+
+
+        resetScores();
+
+
+        const loadingSteps = [
+
+            'Analyzing prompt intent...',
+
+            'Detecting subject and context...',
+
+            'Applying optimization structure...',
+
+            'Generating optimized prompt...'
+
+        ];
+
+
+        let stepIndex = 0;
+
+        const loadingText =
+            document.getElementById('loading-text');
+
+
+        if (loadingText) {
+            loadingText.textContent = loadingSteps[0];
+        }
+
+
+        const interval = setInterval(() => {
+
+            stepIndex++;
+
+            if (
+                stepIndex < loadingSteps.length &&
+                loadingText
+            ) {
+
+                loadingText.textContent =
+                    loadingSteps[stepIndex];
+            }
+
+        }, 450);
+
+
+        setTimeout(() => {
+
+            clearInterval(interval);
+
+
+            const analysis =
+                analyzePrompt(originalPrompt);
+
+
+            const optimized =
+                buildOptimizedPrompt(originalPrompt);
+
+
+            const finalPrompt = `
+<span class="text-secondary-fixed-dim">Role:</span> ${optimized.role}
+
+<span class="text-secondary-fixed-dim">Objective:</span> ${optimized.objective}
+
+<span class="text-secondary-fixed-dim">Context:</span> Preserve the user's original intent and provide content appropriate for the subject, audience, and purpose identified in the original request.
+
+<span class="text-secondary-fixed-dim">Requirements:</span>
+${optimized.requirements
+    .map(item => `- ${item}`)
+    .join('\n')}
+
+<span class="text-secondary-fixed-dim">Output Format:</span> ${optimized.outputFormat}
+
+<span class="text-secondary-fixed-dim">Tone:</span> Clear, helpful, and appropriate for the user's intended audience.
+
+<span class="text-secondary-fixed-dim">Quality Criteria:</span>
+- Stay focused on the original request.
+- Do not introduce unrelated topics.
+- Preserve important details from the original prompt.
+- Provide accurate and logically organized information.
+`;
+
+
+            optimizedContent.innerHTML =
+                finalPrompt;
+
+
+            /* ===== SCORE ===== */
+
+            const scoreCircle =
+                document.getElementById('score-circle');
+
+            const scoreText =
+                document.getElementById('score-text');
+
+
+            if (scoreCircle) {
+
+                scoreCircle.setAttribute(
+                    'stroke-dasharray',
+                    `${analysis.overall}, 100`
+                );
+            }
+
+
+            if (scoreText) {
+
+                animateValue(
+                    scoreText,
+                    0,
+                    analysis.overall,
+                    1000
+                );
+            }
+
+
+            updateQualityScores(analysis);
+
+
             loadingState.classList.add('hidden');
-            resultState.classList.add('hidden');
+            resultState.classList.remove('hidden');
+
+
+            showToast(
+                'Prompt optimized successfully!'
+            );
+
+        }, 1800);
+    }
+
+
+    /* ================================
+       QUALITY SCORE UPDATE
+    ================================= */
+
+    function updateQualityScores(analysis) {
+
+        const scoreValues =
+            document.querySelectorAll('.score-val');
+
+
+        scoreValues.forEach(element => {
+
+            const target =
+                element.getAttribute('data-target');
+
+            if (target) {
+
+                const value =
+                    getScoreByName(
+                        target,
+                        analysis
+                    );
+
+                animateValue(
+                    element,
+                    0,
+                    value,
+                    1000
+                );
+            }
         });
 
-        function generatePrompt() {
-            if (!promptInput.value.trim()) {
-                showToast('Please enter a prompt to optimize.', 'error', true);
-                return;
+
+        updateBar(
+            'bar-clarity',
+            analysis.clarity
+        );
+
+        updateBar(
+            'bar-context',
+            analysis.context
+        );
+
+        updateBar(
+            'bar-constraints',
+            analysis.constraints
+        );
+    }
+
+
+    function getScoreByName(name, analysis) {
+
+        const normalized =
+            name.toLowerCase();
+
+
+        if (normalized === 'clarity') {
+            return analysis.clarity;
+        }
+
+        if (normalized === 'specificity') {
+            return analysis.specificity;
+        }
+
+        if (normalized === 'context') {
+            return analysis.context;
+        }
+
+        if (normalized === 'structure') {
+            return analysis.structure;
+        }
+
+        if (normalized === 'constraints') {
+            return analysis.constraints;
+        }
+
+
+        return analysis.overall;
+    }
+
+
+    function updateBar(id, value) {
+
+        const bar =
+            document.getElementById(id);
+
+        if (bar) {
+            bar.style.width = `${value}%`;
+        }
+    }
+
+
+    /* ================================
+       NUMBER ANIMATION
+    ================================= */
+
+    function animateValue(
+        idOrEl,
+        start,
+        end,
+        duration
+    ) {
+
+        let startTimestamp = null;
+
+
+        const step = (timestamp) => {
+
+            if (!startTimestamp) {
+                startTimestamp = timestamp;
             }
 
-            emptyState.classList.add('hidden');
-            resultState.classList.add('hidden');
-            loadingState.classList.remove('hidden');
 
-            // Reset scores
-            document.getElementById('score-circle').setAttribute('stroke-dasharray', '0, 100');
-            document.getElementById('score-text').textContent = '0';
-            document.getElementById('bar-clarity').style.width = '0%';
-            document.getElementById('bar-context').style.width = '0%';
-            document.getElementById('bar-constraints').style.width = '0%';
-            document.querySelectorAll('.score-val').forEach(el => el.textContent = '0');
+            const progress =
+                Math.min(
+                    (timestamp - startTimestamp) /
+                    duration,
+                    1
+                );
 
-            setTimeout(() => {
-                loadingState.classList.add('hidden');
-                resultState.classList.remove('hidden');
-                
-                optimizedContent.innerHTML = `
-<span class="text-secondary-fixed-dim">Role:</span> Act as a senior technical writer and domain expert in artificial intelligence.
 
-<span class="text-secondary-fixed-dim">Task:</span> Write a comprehensive, well-structured blog post explaining the current impact and future potential of AI in the healthcare industry.
+            const obj =
+                typeof idOrEl === 'string'
+                    ? document.getElementById(idOrEl)
+                    : idOrEl;
 
-<span class="text-secondary-fixed-dim">Context:</span> The target audience is healthcare administrators and medical professionals who are somewhat tech-savvy but not developers. The goal is to demystify AI, highlight practical applications, and address common concerns about data privacy and job displacement.
 
-<span class="text-secondary-fixed-dim">Constraints:</span>
-- Length: 1200 - 1500 words.
-- Tone: Professional, authoritative, yet accessible and reassuring.
-- Structure: Include an engaging introduction, 3-4 main sections with clear H2 headings, and a forward-looking conclusion.
-- Formatting: Use bullet points for lists and bold text for key terms.
+            if (!obj) return;
 
-<span class="text-secondary-fixed-dim">Format Output:</span> Markdown format, ready to be published on a standard CMS.`;
 
-                // Animate scores
+            obj.textContent =
+                Math.floor(
+                    progress * (end - start) + start
+                );
+
+
+            if (progress < 1) {
+
+                window.requestAnimationFrame(step);
+            }
+        };
+
+
+        window.requestAnimationFrame(step);
+    }
+
+
+    /* ================================
+       BUTTON EVENTS
+    ================================= */
+
+    optimizeBtn.addEventListener(
+        'click',
+        generatePrompt
+    );
+
+
+    regenerateBtn.addEventListener(
+        'click',
+        generatePrompt
+    );
+
+
+    /* ================================
+       COPY
+    ================================= */
+
+    copyBtn.addEventListener(
+        'click',
+        () => {
+
+            navigator.clipboard
+                .writeText(
+                    optimizedContent.innerText
+                )
+                .then(() => {
+
+                    showToast(
+                        'Copied to clipboard!',
+                        'content_copy'
+                    );
+
+                })
+                .catch(() => {
+
+                    showToast(
+                        'Unable to copy prompt.',
+                        'error',
+                        true
+                    );
+
+                });
+        }
+    );
+
+
+    /* ================================
+       SAVE
+    ================================= */
+
+    saveBtn.addEventListener(
+        'click',
+        () => {
+
+            showToast(
+                'Saved to your collection!',
+                'bookmark_added'
+            );
+
+
+            const savedIcon =
+                document.getElementById('saved-icon');
+
+
+            if (savedIcon) {
+
+                savedIcon.classList.add(
+                    'text-primary',
+                    'scale-110'
+                );
+
+
                 setTimeout(() => {
-                    document.getElementById('score-circle').setAttribute('stroke-dasharray', '94, 100');
-                    animateValue('score-text', 0, 94, 1000);
-                    
-                    document.getElementById('bar-clarity').style.width = '98%';
-                    document.getElementById('bar-context').style.width = '92%';
-                    document.getElementById('bar-constraints').style.width = '92%';
-                    
-                    document.querySelectorAll('.score-val').forEach(el => {
-                        animateValue(el, 0, parseInt(el.getAttribute('data-target')), 1000);
-                    });
-                }, 100);
 
-                showToast('Prompt optimized successfully!');
-            }, 1500);
+                    savedIcon.classList.remove(
+                        'text-primary',
+                        'scale-110'
+                    );
+
+                }, 500);
+            }
         }
+    );
 
-        function animateValue(idOrEl, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const obj = typeof idOrEl === 'string' ? document.getElementById(idOrEl) : idOrEl;
-                obj.innerHTML = Math.floor(progress * (end - start) + start);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
-
-        optimizeBtn.addEventListener('click', generatePrompt);
-        regenerateBtn.addEventListener('click', generatePrompt);
-
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(optimizedContent.innerText).then(() => {
-                showToast('Copied to clipboard!', 'content_copy');
-            });
-        });
-
-        saveBtn.addEventListener('click', () => {
-            showToast('Saved to your collection!', 'bookmark_added');
-            const savedIcon = document.getElementById('saved-icon');
-            savedIcon.classList.add('text-primary', 'scale-110');
-            setTimeout(() => savedIcon.classList.remove('text-primary', 'scale-110'), 500);
-        });
-
-    </script>
+</script>
 </body></html>
