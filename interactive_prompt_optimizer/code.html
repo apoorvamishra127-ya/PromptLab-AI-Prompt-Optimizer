@@ -289,7 +289,7 @@
 <div class="flex flex-col gap-1">
 <label class="font-label-md text-label-md text-on-surface-variant">Target Model</label>
 <div class="relative">
-<select class="w-full bg-[#050505] border border-outline-variant rounded-DEFAULT py-2 px-3 appearance-none text-body-sm text-on-surface focus:outline-none input-glow cursor-pointer">
+<select id="target-model" class="w-full bg-[#050505] border border-outline-variant rounded-DEFAULT py-2 px-3 appearance-none text-body-sm text-on-surface focus:outline-none input-glow cursor-pointer">
 <option>GPT-4</option>
 <option>Claude 3 Opus</option>
 <option>Gemini 1.5 Pro</option>
@@ -300,7 +300,7 @@
 <div class="flex flex-col gap-1">
 <label class="font-label-md text-label-md text-on-surface-variant">Optimization Focus</label>
 <div class="relative">
-<select class="w-full bg-[#050505] border border-outline-variant rounded-DEFAULT py-2 px-3 appearance-none text-body-sm text-on-surface focus:outline-none input-glow cursor-pointer">
+<select id="optimization-focus" class="w-full bg-[#050505] border border-outline-variant rounded-DEFAULT py-2 px-3 appearance-none text-body-sm text-on-surface focus:outline-none input-glow cursor-pointer">
 <option>General Clarity</option>
 <option>Code Generation</option>
 <option>Creative Writing</option>
@@ -312,7 +312,7 @@
 <div class="flex flex-col gap-1">
 <label class="font-label-md text-label-md text-on-surface-variant">Tone</label>
 <div class="relative">
-<select class="w-full bg-[#050505] border border-outline-variant rounded-DEFAULT py-2 px-3 appearance-none text-body-sm text-on-surface focus:outline-none input-glow cursor-pointer">
+<select id="tone-select" class="w-full bg-[#050505] border border-outline-variant rounded-DEFAULT py-2 px-3 appearance-none text-body-sm text-on-surface focus:outline-none input-glow cursor-pointer">
 <option>Professional</option>
 <option>Academic</option>
 <option>Conversational</option>
@@ -456,671 +456,516 @@
 </button>
 </div>
 <script>
-    // ============================================
-    // PROMPTLAB AI - INTERACTIVE PROMPT OPTIMIZER
-    // ============================================
+const promptInput = document.getElementById("prompt-input");
+const charCounter = document.getElementById("char-counter");
+const optimizeBtn = document.getElementById("optimize-btn");
+const clearBtn = document.getElementById("clear-btn");
+const copyBtn = document.getElementById("copy-btn");
+const saveBtn = document.getElementById("save-btn");
+const regenerateBtn = document.getElementById("regenerate-btn");
 
-    const promptInput = document.getElementById("prompt-input");
-    const charCounter = document.getElementById("char-counter");
+const targetModel = document.getElementById("target-model");
+const optimizationFocus = document.getElementById("optimization-focus");
+const toneSelect = document.getElementById("tone-select");
 
-    const optimizeBtn = document.getElementById("optimize-btn");
-    const clearBtn = document.getElementById("clear-btn");
-    const copyBtn = document.getElementById("copy-btn");
-    const saveBtn = document.getElementById("save-btn");
-    const regenerateBtn = document.getElementById("regenerate-btn");
+const emptyState = document.getElementById("empty-state");
+const loadingState = document.getElementById("loading-state");
+const resultState = document.getElementById("result-state");
+const optimizedContent = document.getElementById("optimized-content");
 
-    const emptyState = document.getElementById("empty-state");
-    const loadingState = document.getElementById("loading-state");
-    const resultState = document.getElementById("result-state");
+const toast = document.getElementById("toast");
+const toastMsg = document.getElementById("toast-msg");
+const toastIcon = document.getElementById("toast-icon");
 
-    const optimizedContent = document.getElementById("optimized-content");
+let toastTimeout;
 
-    const toast = document.getElementById("toast");
-    const toastMsg = document.getElementById("toast-msg");
-    const toastIcon = document.getElementById("toast-icon");
+function showToast(msg, icon = "check_circle", isError = false) {
+    clearTimeout(toastTimeout);
 
-    const loadingText = document.getElementById("loading-text");
+    toastMsg.textContent = msg;
+    toastIcon.textContent = icon;
 
-    // Get dropdowns
-    const dropdowns = document.querySelectorAll("select");
+    toastIcon.className =
+        `material-symbols-outlined ${isError ? "text-error" : "text-primary"}`;
 
-    const targetModel = dropdowns[0];
-    const optimizationFocus = dropdowns[1];
-    const toneSelect = dropdowns[2];
+    toast.classList.remove("translate-y-10", "opacity-0");
+    toast.classList.add("translate-y-0", "opacity-100");
 
-    let toastTimer;
+    toastTimeout = setTimeout(hideToast, 3000);
+}
+
+function hideToast() {
+    toast.classList.add("translate-y-10", "opacity-0");
+    toast.classList.remove("translate-y-0", "opacity-100");
+}
 
 
-    // ============================================
-    // TOAST
-    // ============================================
+/* Character Counter */
+promptInput.addEventListener("input", () => {
+    const len = promptInput.value.length;
 
-    function showToast(message, icon = "check_circle", error = false) {
+    charCounter.textContent = `${len} / 2000`;
 
-        if (!toast) return;
-
-        clearTimeout(toastTimer);
-
-        toastMsg.textContent = message;
-        toastIcon.textContent = icon;
-
-        toastIcon.className =
-            "material-symbols-outlined " +
-            (error ? "text-error" : "text-primary");
-
-        toast.classList.remove("translate-y-10", "opacity-0");
-        toast.classList.add("translate-y-0", "opacity-100");
-
-        toastTimer = setTimeout(() => {
-
-            toast.classList.add("translate-y-10", "opacity-0");
-            toast.classList.remove("translate-y-0", "opacity-100");
-
-        }, 3000);
+    if (len > 2000) {
+        charCounter.classList.add("text-error");
+    } else {
+        charCounter.classList.remove("text-error");
     }
+});
 
 
-    // ============================================
-    // CHARACTER COUNTER
-    // ============================================
+/* Clear */
+clearBtn.addEventListener("click", () => {
+    promptInput.value = "";
 
-    promptInput.addEventListener("input", function () {
+    charCounter.textContent = "0 / 2000";
 
-        const length = promptInput.value.length;
-
-        charCounter.textContent = `${length} / 2000`;
-
-        if (length > 2000) {
-
-            charCounter.classList.add("text-error");
-
-        } else {
-
-            charCounter.classList.remove("text-error");
-        }
-    });
+    emptyState.classList.remove("hidden");
+    loadingState.classList.add("hidden");
+    resultState.classList.add("hidden");
+});
 
 
-    // ============================================
-    // CLEAR
-    // ============================================
-
-    clearBtn.addEventListener("click", function () {
-
-        promptInput.value = "";
-
-        charCounter.textContent = "0 / 2000";
-
-        emptyState.classList.remove("hidden");
-        loadingState.classList.add("hidden");
-        resultState.classList.add("hidden");
-
-        showToast("Prompt cleared", "delete_sweep");
-    });
-
-
-    // ============================================
-    // ESCAPE HTML
-    // ============================================
-
-    function escapeHTML(text) {
-
-        return text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-
-    // ============================================
-    // GET FOCUS INSTRUCTIONS
-    // ============================================
-
-    function getFocusInstructions(focus) {
-
-        if (focus === "Code Generation") {
-
-            return `
-Focus on programming requirements, logic, implementation details,
-edge cases, input/output expectations, and clean code structure.
-`;
-
-        }
-
-        if (focus === "Creative Writing") {
-
-            return `
-Focus on creativity, originality, engaging language,
-appropriate storytelling structure, and the requested creative direction.
-`;
-
-        }
-
-        if (focus === "Data Analysis") {
-
-            return `
-Focus on analytical accuracy, relevant metrics, patterns,
-insights, assumptions, comparisons, and clear presentation of findings.
-`;
-
-        }
-
-        return `
-Focus on clarity, specificity, completeness, removing ambiguity,
-and making the original request easy for an AI model to execute correctly.
-`;
-    }
-
-
-    // ============================================
-    // GET TONE INSTRUCTIONS
-    // ============================================
-
-    function getToneInstructions(tone) {
-
-        if (tone === "Academic") {
-
-            return `
-Use an academic and educational tone.
-Explain concepts systematically, use precise terminology,
-and organize information logically for learning and revision.
-`;
-
-        }
-
-        if (tone === "Conversational") {
-
-            return `
-Use a friendly and natural conversational tone.
-Explain concepts in simple language while keeping the response accurate.
-`;
-
-        }
-
-        if (tone === "Direct") {
-
-            return `
-Use a direct, concise, action-oriented tone.
-Avoid unnecessary wording and focus immediately on the requested task.
-`;
-
-        }
-
-        return `
-Use a professional, clear, structured, and authoritative tone.
-`;
-    }
-
-
-    // ============================================
-    // BUILD OPTIMIZED PROMPT
-    // ============================================
-
-   function createOptimizedPrompt() {
+/* MAIN OPTIMIZER */
+async function generatePrompt() {
 
     const originalPrompt = promptInput.value.trim();
 
-    const model = targetModel
-        ? targetModel.value
-        : "GPT-4";
+    if (!originalPrompt) {
+        showToast(
+            "Please enter a prompt to optimize.",
+            "error",
+            true
+        );
+        return;
+    }
 
-    const focus = optimizationFocus
-        ? optimizationFocus.value
-        : "General Clarity";
-
-    const tone = toneSelect
-        ? toneSelect.value
-        : "Professional";
-
-
-    const lowerPrompt = originalPrompt.toLowerCase();
-
-
-    // ==========================================
-    // DETECT USER'S ACTUAL TOPIC
-    // ==========================================
-
-    let detectedSubject = "the requested topic";
-    let subjectRole = "an expert subject-matter instructor";
-
-    if (
-        lowerPrompt.includes("operating system") ||
-        lowerPrompt.includes("operating systems") ||
-        lowerPrompt.includes(" os ") ||
-        lowerPrompt.startsWith("os ") ||
-        lowerPrompt.includes(" os notes")
-    ) {
-        detectedSubject = "Operating Systems (OS)";
-        subjectRole = "an expert Operating Systems instructor";
+    if (originalPrompt.length > 2000) {
+        showToast(
+            "Prompt cannot exceed 2000 characters.",
+            "error",
+            true
+        );
+        return;
     }
 
 
-    // ==========================================
-    // DETECT STUDY / NOTES REQUEST
-    // ==========================================
-
-    const isStudyRequest =
-        lowerPrompt.includes("notes") ||
-        lowerPrompt.includes("mid term") ||
-        lowerPrompt.includes("midterm") ||
-        lowerPrompt.includes("exam") ||
-        lowerPrompt.includes("study") ||
-        lowerPrompt.includes("revision");
+    /* Get selected options */
+    const selectedModel = targetModel.value;
+    const selectedFocus = optimizationFocus.value;
+    const selectedTone = toneSelect.value;
 
 
-    // ==========================================
-    // FOCUS
-    // ==========================================
+    /* UI → Loading */
+    emptyState.classList.add("hidden");
+    resultState.classList.add("hidden");
+    loadingState.classList.remove("hidden");
 
-    let focusInstruction = "";
 
-    if (focus === "Code Generation") {
+    try {
 
-        focusInstruction =
-            "Focus on implementation details, logic, algorithms, code structure, edge cases, and practical examples.";
+        const response = await fetch("/api/optimize", {
 
-    } else if (focus === "Creative Writing") {
+            method: "POST",
 
-        focusInstruction =
-            "Focus on creativity, originality, engaging presentation, and appropriate structure.";
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-    } else if (focus === "Data Analysis") {
+            body: JSON.stringify({
 
-        focusInstruction =
-            "Focus on analytical accuracy, relevant metrics, comparisons, patterns, and meaningful insights.";
+                prompt: originalPrompt,
 
-    } else {
+                focus: selectedFocus,
 
-        focusInstruction =
-            "Focus on clarity, specificity, completeness, logical organization, and removing ambiguity.";
+                tone: selectedTone,
+
+                targetModel: selectedModel
+
+            })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "Optimization failed."
+            );
+
+        }
+
+
+        const optimizedPrompt =
+            data.optimizedPrompt;
+
+
+        if (!optimizedPrompt) {
+
+            throw new Error(
+                "AI returned an empty response."
+            );
+
+        }
+
+
+        /* Hide loading */
+        loadingState.classList.add("hidden");
+
+        resultState.classList.remove("hidden");
+
+
+        /* Show REAL AI result */
+
+        optimizedContent.textContent =
+            optimizedPrompt;
+
+
+        /* Compare */
+        const compareOriginal =
+            document.getElementById("compare-original");
+
+        const compareOptimized =
+            document.getElementById("compare-optimized");
+
+        if (compareOriginal) {
+
+            compareOriginal.textContent =
+                originalPrompt;
+
+        }
+
+        if (compareOptimized) {
+
+            compareOptimized.textContent =
+                optimizedPrompt;
+
+        }
+
+
+        /* Score */
+
+        const scoreCircle =
+            document.getElementById("score-circle");
+
+        const scoreText =
+            document.getElementById("score-text");
+
+        if (scoreCircle) {
+
+            scoreCircle.setAttribute(
+                "stroke-dasharray",
+                "94, 100"
+            );
+
+        }
+
+        if (scoreText) {
+
+            animateValue(
+                scoreText,
+                0,
+                94,
+                800
+            );
+
+        }
+
+
+        showToast(
+            "Prompt optimized successfully!",
+            "auto_awesome"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Optimization error:",
+            error
+        );
+
+        loadingState.classList.add("hidden");
+
+        emptyState.classList.remove("hidden");
+
+        showToast(
+            error.message ||
+            "Something went wrong. Please try again.",
+            "error",
+            true
+        );
+
     }
 
-
-    // ==========================================
-    // TONE
-    // ==========================================
-
-    let toneInstruction = "";
-
-    if (tone === "Academic") {
-
-        toneInstruction =
-            "Use an academic and educational tone with precise terminology and logically organized explanations.";
-
-    } else if (tone === "Conversational") {
-
-        toneInstruction =
-            "Use a friendly, natural, student-friendly conversational tone while maintaining accuracy.";
-
-    } else if (tone === "Direct") {
-
-        toneInstruction =
-            "Use a direct, concise, and action-oriented tone without unnecessary explanations.";
-
-    } else {
-
-        toneInstruction =
-            "Use a professional, clear, structured, and authoritative tone.";
-    }
-
-
-    // ==========================================
-    // STUDY / NOTES PROMPT
-    // ==========================================
-
-    if (isStudyRequest) {
-
-        return `
-<span class="text-secondary-fixed-dim">Role:</span>
-Act as ${subjectRole}.
-
-<span class="text-secondary-fixed-dim">Task:</span>
-Create comprehensive study notes for ${detectedSubject} based on the user's original request.
-
-<span class="text-secondary-fixed-dim">Original Request:</span>
-${escapeHTML(originalPrompt)}
-
-<span class="text-secondary-fixed-dim">Purpose:</span>
-The notes are intended for mid-term examination preparation and revision.
-
-<span class="text-secondary-fixed-dim">Requirements:</span>
-- Cover the important concepts relevant to the requested subject.
-- Explain concepts clearly using simple, student-friendly language.
-- Include clear and accurate definitions.
-- Organize the content using headings and subheadings.
-- Explain important concepts step by step where necessary.
-- Include suitable examples wherever useful.
-- Highlight important exam-oriented points.
-- Include comparisons or differences in table format where appropriate.
-- Keep the notes structured and easy to revise.
-- Do not replace the user's requested subject with an unrelated topic.
-- Preserve the original intent of the request.
-
-<span class="text-secondary-fixed-dim">Optimization Focus:</span>
-${escapeHTML(focus)}
-
-<span class="text-secondary-fixed-dim">Focus Instructions:</span>
-${focusInstruction}
-
-<span class="text-secondary-fixed-dim">Tone:</span>
-${escapeHTML(tone)}
-
-<span class="text-secondary-fixed-dim">Tone Instructions:</span>
-${toneInstruction}
-
-<span class="text-secondary-fixed-dim">Target Model:</span>
-${escapeHTML(model)}
-
-<span class="text-secondary-fixed-dim">Output Format:</span>
-Use clear headings, subheadings, bullet points, definitions, examples, and comparison tables where appropriate.
-
-<span class="text-secondary-fixed-dim">Quality Criteria:</span>
-The optimized prompt should be specific, relevant to ${detectedSubject}, exam-oriented, logically structured, easy to understand, and faithful to the user's original request.
-`;
-    }
-
-
-    // ==========================================
-    // GENERAL REQUEST
-    // ==========================================
-
-    return `
-<span class="text-secondary-fixed-dim">Role:</span>
-Act as an expert AI assistant specialized in ${detectedSubject}.
-
-<span class="text-secondary-fixed-dim">Task:</span>
-${escapeHTML(originalPrompt)}
-
-<span class="text-secondary-fixed-dim">Optimization Focus:</span>
-${escapeHTML(focus)}
-
-<span class="text-secondary-fixed-dim">Focus Instructions:</span>
-${focusInstruction}
-
-<span class="text-secondary-fixed-dim">Tone:</span>
-${escapeHTML(tone)}
-
-<span class="text-secondary-fixed-dim">Tone Instructions:</span>
-${toneInstruction}
-
-<span class="text-secondary-fixed-dim">Target Model:</span>
-${escapeHTML(model)}
-
-<span class="text-secondary-fixed-dim">Requirements:</span>
-- Preserve the original intent.
-- Make the request specific and unambiguous.
-- Add useful context where necessary.
-- Organize the response logically.
-- Follow the selected tone and optimization focus.
-- Do not introduce unrelated topics.
-
-<span class="text-secondary-fixed-dim">Expected Output:</span>
-Generate a clear, accurate, well-structured response that directly addresses the user's original request.
-
-<span class="text-secondary-fixed-dim">Quality Criteria:</span>
-The result should be relevant, specific, coherent, actionable, and aligned with the original request.
-`;
 }
 
-    // ============================================
-    // MAIN OPTIMIZE FUNCTION
-    // ============================================
 
-    function generatePrompt() {
+/* Score Animation */
+function animateValue(
+    element,
+    start,
+    end,
+    duration
+) {
 
-        const originalPrompt =
-            promptInput.value.trim();
+    let startTimestamp = null;
+
+    function step(timestamp) {
+
+        if (!startTimestamp) {
+            startTimestamp = timestamp;
+        }
+
+        const progress =
+            Math.min(
+                (timestamp - startTimestamp) /
+                duration,
+                1
+            );
+
+        element.textContent =
+            Math.floor(
+                progress *
+                (end - start) +
+                start
+            );
+
+        if (progress < 1) {
+
+            window.requestAnimationFrame(step);
+
+        }
+
+    }
+
+    window.requestAnimationFrame(step);
+}
 
 
-        // No prompt
-        if (!originalPrompt) {
+/* Optimize */
+optimizeBtn.addEventListener(
+    "click",
+    generatePrompt
+);
+
+
+/* Regenerate */
+regenerateBtn.addEventListener(
+    "click",
+    generatePrompt
+);
+
+
+/* Copy */
+copyBtn.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            await navigator.clipboard.writeText(
+                optimizedContent.innerText
+            );
 
             showToast(
-                "Please enter a prompt to optimize.",
+                "Copied to clipboard!",
+                "content_copy"
+            );
+
+        } catch {
+
+            showToast(
+                "Unable to copy text.",
                 "error",
                 true
             );
 
-            return;
         }
 
-
-        // Show loading
-        emptyState.classList.add("hidden");
-        resultState.classList.add("hidden");
-        loadingState.classList.remove("hidden");
+    }
+);
 
 
-        // Loading messages
-        const messages = [
-            "Analyzing your prompt...",
-            "Understanding your intent...",
-            "Applying optimization focus...",
-            "Adjusting tone...",
-            "Building optimized prompt..."
-        ];
+/* Save */
+saveBtn.addEventListener(
+    "click",
+    () => {
 
-        let index = 0;
+        showToast(
+            "Saved to your collection!",
+            "bookmark_added"
+        );
 
-        if (loadingText) {
-
-            loadingText.textContent =
-                messages[0];
-        }
-
-
-        const interval =
-            setInterval(() => {
-
-                index++;
-
-                if (index < messages.length) {
-
-                    loadingText.textContent =
-                        messages[index];
-                }
-
-            }, 350);
-
-
-        // ----------------------------------------
-        // Generate result
-        // ----------------------------------------
-
-        setTimeout(() => {
-
-            clearInterval(interval);
-
-            loadingState.classList.add("hidden");
-            resultState.classList.remove("hidden");
-
-
-            const finalPrompt =
-                createOptimizedPrompt();
-
-
-            // Show optimized prompt
-            optimizedContent.innerHTML =
-                finalPrompt;
-
-
-            // Score
-            const scoreCircle =
-                document.getElementById("score-circle");
-
-            const scoreText =
-                document.getElementById("score-text");
-
-
-            if (scoreCircle) {
-
-                scoreCircle.setAttribute(
-                    "stroke-dasharray",
-                    "94, 100"
-                );
-            }
-
-
-            if (scoreText) {
-
-                animateScore(
-                    scoreText,
-                    0,
-                    94,
-                    800
-                );
-            }
-
-
-            showToast(
-                "Prompt optimized successfully!"
+        const savedIcon =
+            document.getElementById(
+                "saved-icon"
             );
 
-        }, 1800);
-    }
+        if (savedIcon) {
 
-
-    // ============================================
-    // SCORE ANIMATION
-    // ============================================
-
-    function animateScore(
-        element,
-        start,
-        end,
-        duration
-    ) {
-
-        let startTime = null;
-
-        function animate(timestamp) {
-
-            if (!startTime) {
-                startTime = timestamp;
-            }
-
-            const progress =
-                Math.min(
-                    (timestamp - startTime) / duration,
-                    1
-                );
-
-            element.textContent =
-                Math.floor(
-                    start +
-                    progress *
-                    (end - start)
-                );
-
-            if (progress < 1) {
-
-                requestAnimationFrame(animate);
-            }
-        }
-
-        requestAnimationFrame(animate);
-    }
-
-
-    // ============================================
-    // OPTIMIZE BUTTON
-    // ============================================
-
-    optimizeBtn.addEventListener(
-        "click",
-        generatePrompt
-    );
-
-
-    // ============================================
-    // REGENERATE
-    // ============================================
-
-    regenerateBtn.addEventListener(
-        "click",
-        generatePrompt
-    );
-
-
-    // ============================================
-    // COPY
-    // ============================================
-
-    copyBtn.addEventListener(
-        "click",
-        function () {
-
-            const text =
-                optimizedContent.innerText;
-
-            navigator.clipboard
-                .writeText(text)
-                .then(() => {
-
-                    showToast(
-                        "Optimized prompt copied!",
-                        "content_copy"
-                    );
-
-                })
-                .catch(() => {
-
-                    showToast(
-                        "Could not copy prompt.",
-                        "error",
-                        true
-                    );
-                });
-        }
-    );
-
-
-    // ============================================
-    // SAVE
-    // ============================================
-
-    saveBtn.addEventListener(
-        "click",
-        function () {
-
-            showToast(
-                "Prompt saved successfully!",
-                "bookmark_added"
+            savedIcon.classList.add(
+                "text-primary",
+                "scale-110"
             );
 
-            const savedIcon =
-                document.getElementById("saved-icon");
+            setTimeout(() => {
 
-            if (savedIcon) {
-
-                savedIcon.classList.add(
+                savedIcon.classList.remove(
                     "text-primary",
                     "scale-110"
                 );
 
-                setTimeout(() => {
+            }, 500);
 
-                    savedIcon.classList.remove(
-                        "text-primary",
-                        "scale-110"
-                    );
+        }
 
-                }, 500);
-            }
+    }
+);
+
+
+/* Example prompt */
+const exampleBtn =
+    document.getElementById("example-btn");
+
+if (exampleBtn) {
+
+    exampleBtn.addEventListener(
+        "click",
+        () => {
+
+            promptInput.value =
+                "Explain machine learning to a beginner with simple examples.";
+
+            promptInput.dispatchEvent(
+                new Event("input")
+            );
+
+        }
+    );
+
+}
+
+
+/* Start Over */
+const startOverBtn =
+    document.getElementById("start-over-btn");
+
+if (startOverBtn) {
+
+    startOverBtn.addEventListener(
+        "click",
+        () => {
+
+            emptyState.classList.remove(
+                "hidden"
+            );
+
+            loadingState.classList.add(
+                "hidden"
+            );
+
+            resultState.classList.add(
+                "hidden"
+            );
+
+            promptInput.value = "";
+
+            promptInput.dispatchEvent(
+                new Event("input")
+            );
+
+        }
+    );
+
+}
+
+
+/* Optimized / Compare */
+
+const viewOptimized =
+    document.getElementById("view-optimized");
+
+const viewCompare =
+    document.getElementById("view-compare");
+
+const compareContent =
+    document.getElementById("compare-content");
+
+
+if (viewOptimized && viewCompare) {
+
+    viewOptimized.addEventListener(
+        "click",
+        () => {
+
+            viewOptimized.classList.add(
+                "bg-primary",
+                "text-on-primary"
+            );
+
+            viewOptimized.classList.remove(
+                "text-on-surface-variant"
+            );
+
+            viewCompare.classList.remove(
+                "bg-primary",
+                "text-on-primary"
+            );
+
+            viewCompare.classList.add(
+                "text-on-surface-variant"
+            );
+
+            optimizedContent.classList.remove(
+                "hidden"
+            );
+
+            compareContent.classList.add(
+                "hidden"
+            );
+
         }
     );
 
 
-    // ============================================
-    // DONE
-    // ============================================
+    viewCompare.addEventListener(
+        "click",
+        () => {
 
-    console.log(
-        "PromptLab AI Optimizer loaded successfully."
+            viewCompare.classList.add(
+                "bg-primary",
+                "text-on-primary"
+            );
+
+            viewCompare.classList.remove(
+                "text-on-surface-variant"
+            );
+
+            viewOptimized.classList.remove(
+                "bg-primary",
+                "text-on-primary"
+            );
+
+            viewOptimized.classList.add(
+                "text-on-surface-variant"
+            );
+
+            optimizedContent.classList.add(
+                "hidden"
+            );
+
+            compareContent.classList.remove(
+                "hidden"
+            );
+
+        }
     );
 
+}
 </script>
 </body>
 </html>
