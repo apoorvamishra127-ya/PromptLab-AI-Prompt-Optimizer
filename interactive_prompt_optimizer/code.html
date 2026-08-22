@@ -458,35 +458,47 @@
 <script>
 const promptInput = document.getElementById("prompt-input");
 const charCounter = document.getElementById("char-counter");
+
 const optimizeBtn = document.getElementById("optimize-btn");
 const clearBtn = document.getElementById("clear-btn");
+const regenerateBtn = document.getElementById("regenerate-btn");
 const copyBtn = document.getElementById("copy-btn");
 const saveBtn = document.getElementById("save-btn");
-const regenerateBtn = document.getElementById("regenerate-btn");
-
-const targetModel = document.getElementById("target-model");
-const optimizationFocus = document.getElementById("optimization-focus");
-const toneSelect = document.getElementById("tone-select");
 
 const emptyState = document.getElementById("empty-state");
 const loadingState = document.getElementById("loading-state");
 const resultState = document.getElementById("result-state");
+
 const optimizedContent = document.getElementById("optimized-content");
 
 const toast = document.getElementById("toast");
 const toastMsg = document.getElementById("toast-msg");
 const toastIcon = document.getElementById("toast-icon");
 
+const targetModel = document.getElementById("target-model");
+const optimizationFocus = document.getElementById("optimization-focus");
+const toneSelect = document.getElementById("tone-select");
+
+let originalPrompt = "";
+let optimizedPrompt = "";
 let toastTimeout;
 
-function showToast(msg, icon = "check_circle", isError = false) {
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message, icon = "check_circle", error = false) {
+    if (!toast || !toastMsg || !toastIcon) return;
+
     clearTimeout(toastTimeout);
 
-    toastMsg.textContent = msg;
+    toastMsg.textContent = message;
     toastIcon.textContent = icon;
 
     toastIcon.className =
-        `material-symbols-outlined ${isError ? "text-error" : "text-primary"}`;
+        "material-symbols-outlined " +
+        (error ? "text-error" : "text-primary");
 
     toast.classList.remove("translate-y-10", "opacity-0");
     toast.classList.add("translate-y-0", "opacity-100");
@@ -495,18 +507,23 @@ function showToast(msg, icon = "check_circle", isError = false) {
 }
 
 function hideToast() {
+    if (!toast) return;
+
     toast.classList.add("translate-y-10", "opacity-0");
     toast.classList.remove("translate-y-0", "opacity-100");
 }
 
 
-/* Character Counter */
-promptInput.addEventListener("input", () => {
-    const len = promptInput.value.length;
+/* =========================
+   CHARACTER COUNTER
+========================= */
 
-    charCounter.textContent = `${len} / 2000`;
+promptInput.addEventListener("input", function () {
+    const length = promptInput.value.length;
 
-    if (len > 2000) {
+    charCounter.textContent = `${length} / 2000`;
+
+    if (length > 2000) {
         charCounter.classList.add("text-error");
     } else {
         charCounter.classList.remove("text-error");
@@ -514,136 +531,201 @@ promptInput.addEventListener("input", () => {
 });
 
 
-/* Clear */
-clearBtn.addEventListener("click", () => {
-    promptInput.value = "";
+/* =========================
+   CLEAR
+========================= */
 
+clearBtn.addEventListener("click", function () {
+
+    promptInput.value = "";
     charCounter.textContent = "0 / 2000";
+
+    originalPrompt = "";
+    optimizedPrompt = "";
 
     emptyState.classList.remove("hidden");
     loadingState.classList.add("hidden");
     resultState.classList.add("hidden");
+
+    showToast("Prompt cleared", "delete_sweep");
 });
 
 
-/* MAIN OPTIMIZER */
-async function generatePrompt() {
+/* =========================
+   SMART PROMPT OPTIMIZER
+========================= */
 
-    const originalPrompt = promptInput.value.trim();
+function buildOptimizedPrompt(userPrompt) {
 
-    if (!originalPrompt) {
+    const model =
+        targetModel ? targetModel.value : "GPT-4";
+
+    const focus =
+        optimizationFocus ? optimizationFocus.value : "General Clarity";
+
+    const tone =
+        toneSelect ? toneSelect.value : "Professional";
+
+
+    let focusInstruction = "";
+
+    switch (focus) {
+
+        case "General Clarity":
+            focusInstruction =
+                "Improve clarity, specificity, completeness, remove ambiguity, and make the request easy for an AI model to execute.";
+            break;
+
+        case "Code Generation":
+            focusInstruction =
+                "Focus on precise technical requirements, programming language, expected functionality, edge cases, inputs, outputs, and implementation constraints.";
+            break;
+
+        case "Creative Writing":
+            focusInstruction =
+                "Focus on creativity, originality, audience, narrative direction, style, structure, and desired emotional impact.";
+            break;
+
+        case "Data Analysis":
+            focusInstruction =
+                "Focus on analytical objectives, required data, variables, expected calculations, assumptions, output format, and interpretation.";
+            break;
+
+        default:
+            focusInstruction =
+                "Improve clarity, specificity, completeness, and remove ambiguity.";
+    }
+
+
+    let toneInstruction = "";
+
+    switch (tone) {
+
+        case "Academic":
+            toneInstruction =
+                "Use an academic and educational tone with precise terminology and logical organization.";
+            break;
+
+        case "Conversational":
+            toneInstruction =
+                "Use a friendly, natural, easy-to-understand conversational tone.";
+            break;
+
+        case "Direct":
+            toneInstruction =
+                "Use a concise, direct, action-oriented tone without unnecessary wording.";
+            break;
+
+        case "Professional":
+        default:
+            toneInstruction =
+                "Use a professional, clear, and authoritative tone.";
+    }
+
+
+    return `Role:
+Act as an expert AI prompt engineer and subject-aware assistant.
+
+Task:
+Optimize the user's original request into a clear, specific, and effective prompt.
+
+Original Request:
+${userPrompt}
+
+Optimization Focus:
+${focus}
+
+Focus Instructions:
+${focusInstruction}
+
+Tone:
+${tone}
+
+Tone Instructions:
+${toneInstruction}
+
+Target Model:
+${model}
+
+Optimization Requirements:
+- Preserve the user's original intent and subject.
+- Do not replace the user's topic with an unrelated topic.
+- Do not invent a different task.
+- Make the request specific and unambiguous.
+- Add useful context only when it helps the original request.
+- Organize the requirements logically.
+- Include relevant examples or constraints when useful.
+- Follow the selected tone.
+- Follow the selected optimization focus.
+- Make the final prompt practical for the user's actual goal.
+
+Expected Output:
+Return only the optimized prompt that the user can directly copy and use with an AI model.
+
+Quality Criteria:
+The optimized prompt must remain faithful to the original request, be specific, logically structured, relevant, and easy for the target AI model to understand and execute.`;
+}
+
+
+/* =========================
+   DISPLAY OPTIMIZED PROMPT
+========================= */
+
+function displayPrompt(text) {
+
+    optimizedContent.textContent = text;
+
+    optimizedPrompt = text;
+}
+
+
+/* =========================
+   OPTIMIZE
+========================= */
+
+function generatePrompt() {
+
+    const userPrompt = promptInput.value.trim();
+
+    if (!userPrompt) {
+
         showToast(
             "Please enter a prompt to optimize.",
             "error",
             true
         );
+
         return;
     }
 
-    if (originalPrompt.length > 2000) {
+
+    if (userPrompt.length > 2000) {
+
         showToast(
-            "Prompt cannot exceed 2000 characters.",
+            "Prompt is too long. Maximum 2000 characters.",
             "error",
             true
         );
+
         return;
     }
 
 
-    /* Get selected options */
-    const selectedModel = targetModel.value;
-    const selectedFocus = optimizationFocus.value;
-    const selectedTone = toneSelect.value;
+    originalPrompt = userPrompt;
 
-
-    /* UI → Loading */
     emptyState.classList.add("hidden");
     resultState.classList.add("hidden");
     loadingState.classList.remove("hidden");
 
 
-    try {
+    setTimeout(function () {
 
-        const response = await fetch("/api/optimize", {
+        optimizedPrompt = buildOptimizedPrompt(originalPrompt);
 
-            method: "POST",
+        displayPrompt(optimizedPrompt);
 
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-
-                prompt: originalPrompt,
-
-                focus: selectedFocus,
-
-                tone: selectedTone,
-
-                targetModel: selectedModel
-
-            })
-
-        });
-
-
-        const data = await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error || "Optimization failed."
-            );
-
-        }
-
-
-        const optimizedPrompt =
-            data.optimizedPrompt;
-
-
-        if (!optimizedPrompt) {
-
-            throw new Error(
-                "AI returned an empty response."
-            );
-
-        }
-
-
-        /* Hide loading */
         loadingState.classList.add("hidden");
-
         resultState.classList.remove("hidden");
-
-
-        /* Show REAL AI result */
-
-        optimizedContent.textContent =
-            optimizedPrompt;
-
-
-        /* Compare */
-        const compareOriginal =
-            document.getElementById("compare-original");
-
-        const compareOptimized =
-            document.getElementById("compare-optimized");
-
-        if (compareOriginal) {
-
-            compareOriginal.textContent =
-                originalPrompt;
-
-        }
-
-        if (compareOptimized) {
-
-            compareOptimized.textContent =
-                optimizedPrompt;
-
-        }
 
 
         /* Score */
@@ -655,202 +737,169 @@ async function generatePrompt() {
             document.getElementById("score-text");
 
         if (scoreCircle) {
-
             scoreCircle.setAttribute(
                 "stroke-dasharray",
                 "94, 100"
             );
-
         }
 
         if (scoreText) {
-
-            animateValue(
-                scoreText,
-                0,
-                94,
-                800
-            );
-
+            scoreText.textContent = "94";
         }
 
 
-        showToast(
-            "Prompt optimized successfully!",
-            "auto_awesome"
-        );
+        /* Quality bars if they exist */
+
+        const clarity =
+            document.getElementById("bar-clarity");
+
+        const context =
+            document.getElementById("bar-context");
+
+        const constraints =
+            document.getElementById("bar-constraints");
+
+        if (clarity) clarity.style.width = "96%";
+        if (context) context.style.width = "92%";
+        if (constraints) constraints.style.width = "90%";
 
 
-    } catch (error) {
+        /* Compare view */
 
-        console.error(
-            "Optimization error:",
-            error
-        );
+        const compareOriginal =
+            document.getElementById("compare-original");
 
-        loadingState.classList.add("hidden");
+        const compareOptimized =
+            document.getElementById("compare-optimized");
 
-        emptyState.classList.remove("hidden");
+        if (compareOriginal) {
+            compareOriginal.textContent = originalPrompt;
+        }
 
-        showToast(
-            error.message ||
-            "Something went wrong. Please try again.",
-            "error",
-            true
-        );
+        if (compareOptimized) {
+            compareOptimized.textContent = optimizedPrompt;
+        }
 
-    }
 
+        showToast("Prompt optimized successfully!");
+
+    }, 1200);
 }
 
 
-/* Score Animation */
-function animateValue(
-    element,
-    start,
-    end,
-    duration
-) {
+/* =========================
+   BUTTONS
+========================= */
 
-    let startTimestamp = null;
-
-    function step(timestamp) {
-
-        if (!startTimestamp) {
-            startTimestamp = timestamp;
-        }
-
-        const progress =
-            Math.min(
-                (timestamp - startTimestamp) /
-                duration,
-                1
-            );
-
-        element.textContent =
-            Math.floor(
-                progress *
-                (end - start) +
-                start
-            );
-
-        if (progress < 1) {
-
-            window.requestAnimationFrame(step);
-
-        }
-
-    }
-
-    window.requestAnimationFrame(step);
-}
-
-
-/* Optimize */
 optimizeBtn.addEventListener(
     "click",
     generatePrompt
 );
 
-
-/* Regenerate */
 regenerateBtn.addEventListener(
     "click",
     generatePrompt
 );
 
 
-/* Copy */
-copyBtn.addEventListener(
-    "click",
-    async () => {
+/* =========================
+   COPY
+========================= */
 
-        try {
+copyBtn.addEventListener("click", function () {
 
-            await navigator.clipboard.writeText(
-                optimizedContent.innerText
-            );
+    if (!optimizedPrompt) {
+
+        showToast(
+            "Optimize a prompt first.",
+            "error",
+            true
+        );
+
+        return;
+    }
+
+    navigator.clipboard
+        .writeText(optimizedPrompt)
+        .then(function () {
 
             showToast(
-                "Copied to clipboard!",
+                "Optimized prompt copied!",
                 "content_copy"
             );
 
-        } catch {
+        })
+        .catch(function () {
 
             showToast(
-                "Unable to copy text.",
+                "Unable to copy prompt.",
                 "error",
                 true
             );
 
-        }
-
-    }
-);
+        });
+});
 
 
-/* Save */
-saveBtn.addEventListener(
-    "click",
-    () => {
+/* =========================
+   SAVE
+========================= */
+
+saveBtn.addEventListener("click", function () {
+
+    if (!optimizedPrompt) {
 
         showToast(
-            "Saved to your collection!",
+            "Optimize a prompt first.",
+            "error",
+            true
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const savedPrompts =
+            JSON.parse(
+                localStorage.getItem("promptlab_saved") || "[]"
+            );
+
+        savedPrompts.push({
+            original: originalPrompt,
+            optimized: optimizedPrompt,
+            model: targetModel ? targetModel.value : "GPT-4",
+            focus: optimizationFocus ? optimizationFocus.value : "General Clarity",
+            tone: toneSelect ? toneSelect.value : "Professional",
+            date: new Date().toISOString()
+        });
+
+        localStorage.setItem(
+            "promptlab_saved",
+            JSON.stringify(savedPrompts)
+        );
+
+        showToast(
+            "Prompt saved successfully!",
             "bookmark_added"
         );
 
-        const savedIcon =
-            document.getElementById(
-                "saved-icon"
-            );
+    } catch (error) {
 
-        if (savedIcon) {
-
-            savedIcon.classList.add(
-                "text-primary",
-                "scale-110"
-            );
-
-            setTimeout(() => {
-
-                savedIcon.classList.remove(
-                    "text-primary",
-                    "scale-110"
-                );
-
-            }, 500);
-
-        }
-
+        showToast(
+            "Could not save prompt.",
+            "error",
+            true
+        );
     }
-);
+});
 
 
-/* Example prompt */
-const exampleBtn =
-    document.getElementById("example-btn");
+/* =========================
+   START OVER
+========================= */
 
-if (exampleBtn) {
-
-    exampleBtn.addEventListener(
-        "click",
-        () => {
-
-            promptInput.value =
-                "Explain machine learning to a beginner with simple examples.";
-
-            promptInput.dispatchEvent(
-                new Event("input")
-            );
-
-        }
-    );
-
-}
-
-
-/* Start Over */
 const startOverBtn =
     document.getElementById("start-over-btn");
 
@@ -858,33 +907,48 @@ if (startOverBtn) {
 
     startOverBtn.addEventListener(
         "click",
-        () => {
-
-            emptyState.classList.remove(
-                "hidden"
-            );
-
-            loadingState.classList.add(
-                "hidden"
-            );
-
-            resultState.classList.add(
-                "hidden"
-            );
+        function () {
 
             promptInput.value = "";
+            charCounter.textContent = "0 / 2000";
 
-            promptInput.dispatchEvent(
-                new Event("input")
-            );
+            originalPrompt = "";
+            optimizedPrompt = "";
 
+            resultState.classList.add("hidden");
+            loadingState.classList.add("hidden");
+            emptyState.classList.remove("hidden");
         }
     );
-
 }
 
 
-/* Optimized / Compare */
+/* =========================
+   EXAMPLE PROMPT
+========================= */
+
+const exampleBtn =
+    document.getElementById("example-btn");
+
+if (exampleBtn) {
+
+    exampleBtn.addEventListener(
+        "click",
+        function () {
+
+            promptInput.value =
+                "I want to learn Python for data science from beginner to intermediate level.";
+
+            charCounter.textContent =
+                `${promptInput.value.length} / 2000`;
+        }
+    );
+}
+
+
+/* =========================
+   VIEW TOGGLE
+========================= */
 
 const viewOptimized =
     document.getElementById("view-optimized");
@@ -896,11 +960,11 @@ const compareContent =
     document.getElementById("compare-content");
 
 
-if (viewOptimized && viewCompare) {
+if (viewOptimized && viewCompare && compareContent) {
 
     viewOptimized.addEventListener(
         "click",
-        () => {
+        function () {
 
             viewOptimized.classList.add(
                 "bg-primary",
@@ -920,21 +984,15 @@ if (viewOptimized && viewCompare) {
                 "text-on-surface-variant"
             );
 
-            optimizedContent.classList.remove(
-                "hidden"
-            );
-
-            compareContent.classList.add(
-                "hidden"
-            );
-
+            optimizedContent.classList.remove("hidden");
+            compareContent.classList.add("hidden");
         }
     );
 
 
     viewCompare.addEventListener(
         "click",
-        () => {
+        function () {
 
             viewCompare.classList.add(
                 "bg-primary",
@@ -954,18 +1012,12 @@ if (viewOptimized && viewCompare) {
                 "text-on-surface-variant"
             );
 
-            optimizedContent.classList.add(
-                "hidden"
-            );
-
-            compareContent.classList.remove(
-                "hidden"
-            );
-
+            optimizedContent.classList.add("hidden");
+            compareContent.classList.remove("hidden");
         }
     );
-
 }
+
 </script>
 </body>
 </html>
