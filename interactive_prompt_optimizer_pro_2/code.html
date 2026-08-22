@@ -200,66 +200,130 @@
 </nav>
 <!-- SideNavBar (Desktop) -->
 <aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant py-stack-md z-30">
-<div class="px-gutter mb-stack-md">
-<div class="flex items-center gap-3 mb-2">
-<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary-container">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">view_in_ar</span>
-</div>
-<span class="font-headline-md text-headline-md font-bold text-primary">PromptLab</span>
-</div>
-<span class="font-label-md text-label-md text-on-surface-variant">AI Engine v2.0</span>
-</div>
-<nav class="flex-1 px-stack-sm flex flex-col gap-1 overflow-y-auto">
-<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="../dashboard/code.html">
-    <span class="material-symbols-outlined">dashboard</span>
-    Overview
-</a>
 
-<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-variant/30 font-label-md text-label-md opacity-80 duration-150 cursor-pointer" href="#">
-    <span class="material-symbols-outlined">auto_fix_high</span>
-    Optimize Prompt
-</a>
+    <!-- Logo -->
+    <div class="px-gutter mb-stack-md">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary-container">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">
+                    view_in_ar
+                </span>
+            </div>
 
-<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="../interactive_prompt_analyzer/code.html">
-    <span class="material-symbols-outlined">analytics</span>
-    Analyze Prompt
-</a>
+            <span class="font-headline-md text-headline-md font-bold text-primary">
+                PromptLab
+            </span>
+        </div>
 
-<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="../interactive_templates_library/code.html">
-    <span class="material-symbols-outlined">auto_awesome_motion</span>
-    Templates
-</a>
+        <span class="font-label-md text-label-md text-on-surface-variant">
+            AI Engine v2.0
+        </span>
+    </div>
 
-<div class="my-2 border-t border-outline-variant/50"></div>
 
-<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="../interactive_history_saved_prompts/code.html">
-    <span class="material-symbols-outlined">history</span>
-    History
-</a>
+    <!-- Navigation -->
+    <nav class="flex-1 px-stack-sm flex flex-col gap-1 overflow-y-auto">
 
-<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="../interactive_saved_prompts_library/code.html">
-    <span class="material-symbols-outlined" id="saved-icon">bookmark</span>
-    Saved Prompts
-</a>
+        <!-- Overview -->
+        <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer"
+            href="/PromptLab-AI-Prompt-Optimizer/dashboard/code.html"
+        >
+            <span class="material-symbols-outlined">dashboard</span>
+            Overview
+        </a>
 
-</nav>
 
-<div class="px-stack-sm mt-auto flex flex-col gap-1 pt-stack-sm border-t border-outline-variant/50">
+        <!-- Optimize Prompt - CURRENT PAGE -->
+        <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-variant/30 font-label-md text-label-md opacity-80 duration-150 cursor-pointer"
+            href="#"
+        >
+            <span class="material-symbols-outlined">auto_fix_high</span>
+            Optimize Prompt
+        </a>
 
-<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="../settings/code.html">
-    <span class="material-symbols-outlined">settings</span>
-    Settings
-</a>
 
-<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer" href="#">
-    <span class="material-symbols-outlined">account_circle</span>
-    Profile
-</a>
+        <!-- Analyze Prompt -->
+        <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer"
+            href="/PromptLab-AI-Prompt-Optimizer/interactive_prompt_analyzer/code.html"
+        >
+            <span class="material-symbols-outlined">analytics</span>
+            Analyze Prompt
+        </a>
 
-<button class="mt-4 mx-3 py-2 rounded-DEFAULT bg-surface-variant text-primary border border-outline-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md flex justify-center items-center gap-2">
-    Upgrade to Pro
-</button>
-</div>
+
+        <!-- Templates -->
+        <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer"
+            href="/PromptLab-AI-Prompt-Optimizer/interactive_templates_library/code.html"
+        >
+            <span class="material-symbols-outlined">auto_awesome_motion</span>
+            Templates
+        </a>
+
+
+        <!-- Divider -->
+        <div class="my-2 border-t border-outline-variant/50"></div>
+
+
+        <!-- History -->
+        <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer"
+            href="/PromptLab-AI-Prompt-Optimizer/interactive_history_saved_prompts/code.html"
+        >
+            <span class="material-symbols-outlined">history</span>
+            History
+        </a>
+
+
+        <!-- Saved Prompts -->
+        <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer"
+            href="/PromptLab-AI-Prompt-Optimizer/interactive_saved_prompts_library/code.html"
+        >
+            <span class="material-symbols-outlined" id="saved-icon">
+                bookmark
+            </span>
+            Saved Prompts
+        </a>
+
+    </nav>
+
+
+    <!-- Bottom Navigation -->
+    <div class="px-stack-sm mt-auto flex flex-col gap-1 pt-stack-sm border-t border-outline-variant/50">
+
+        <!-- Settings -->
+        <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer"
+            href="/PromptLab-AI-Prompt-Optimizer/settings/code.html"
+        >
+            <span class="material-symbols-outlined">settings</span>
+            Settings
+        </a>
+
+
+        <!-- Profile -->
+        <a
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md cursor-pointer"
+            href="#"
+        >
+            <span class="material-symbols-outlined">account_circle</span>
+            Profile
+        </a>
+
+
+        <!-- Upgrade -->
+        <button
+            class="mt-4 mx-3 py-2 rounded-DEFAULT bg-surface-variant text-primary border border-outline-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md flex justify-center items-center gap-2"
+        >
+            Upgrade to Pro
+        </button>
+
+    </div>
+
 </aside>
 <!-- TopNavBar (Desktop) -->
 <nav class="hidden md:flex bg-surface/70 dark:bg-surface/70 backdrop-blur-xl fixed top-0 right-0 w-[calc(100%-16rem)] border-b border-outline-variant/30 justify-between items-center h-16 px-gutter z-40">
